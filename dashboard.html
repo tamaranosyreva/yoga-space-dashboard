@@ -446,7 +446,7 @@
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" id="lightbox-close">✕</button>
       <button class="lightbox-nav prev" id="lightbox-prev">‹</button>
-      <img id="lightbox-img" src="" alt="">
+      <img id="lightbox-img" src="" alt="" referrerpolicy="no-referrer">
       <button class="lightbox-nav next" id="lightbox-next">›</button>
     </div>
   </section>
@@ -987,7 +987,7 @@
       posterItems.forEach((it, i) => {
         const card = document.createElement('button');
         card.className = 'poster-card';
-        card.innerHTML = `<img src="${it.preview}" alt="${escapeHtml(it.name)}" loading="lazy">`;
+        card.innerHTML = `<img src="${it.preview}" alt="${escapeHtml(it.name)}" loading="lazy" referrerpolicy="no-referrer">`;
         card.addEventListener('click', () => openLightbox(i));
         grid.appendChild(card);
       });
