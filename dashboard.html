@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Yoga Space — дашборд для планшета</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Lora:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FDF6F0;
+    --green:#5C6937;
+    --orange:#F0803B;
+    --coral:#F95D51;
+    --text:#242424;
+    --card-blue:#CFE6F5;
+    --card-blue-text:#1E4E73;
+    --card-sand:#DEDACB;
+    --card-sand-text:#4A4636;
+    --card-green:#5C6937;
+    --white:#FFFFFF;
+    --peach:#FBE3D2;
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  a{ text-decoration:none; color:inherit; }
+  html,body{
+    margin:0; padding:0; height:100%; width:100%;
+    background:var(--green);
+    overflow:hidden;
+    font-family:'Montserrat', sans-serif;
+    color:var(--text);
+    -webkit-user-select:none; user-select:none;
+  }
+  #frame{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    padding: clamp(10px, 2vw, 28px);
+  }
+  #shell{
+    background:var(--bg);
+    width:100%; height:100%;
+    max-width:1400px;
+    border-radius: clamp(20px, 2.4vw, 36px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  h1,h2,h3{ font-family:'Unbounded', sans-serif; margin:0; font-weight:600; }
+  .view{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    opacity:0; pointer-events:none;
+    transform: translateX(24px);
+    transition: opacity .28s ease, transform .28s ease;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .view.active{ opacity:1; pointer-events:auto; transform:translateX(0); }
+  .view.home{ transform:none; }
+
+  /* ---------- HOME ---------- */
+  .home-inner{
+    display:flex; flex-direction:column; flex:1;
+    padding: clamp(20px,3vw,40px);
+    gap: clamp(14px,1.8vw,22px);
+    justify-content:center;
+  }
+  .header{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:10px;
+  }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .brand .mark{
+    width:clamp(42px,4.2vw,54px); height:clamp(42px,4.2vw,54px);
+    border-radius:50%; background:var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; flex-shrink:0;
+  }
+  .brand .mark svg{ width:60%; height:60%; }
+  .brand-text h1{ font-size:clamp(1.3rem,2vw,1.7rem); color:var(--green); letter-spacing:.01em; }
+  .location{ color:var(--green); opacity:.75; font-weight:600; font-size:clamp(.85rem,1.2vw,1rem); text-align:right; }
+
+  .about-banner{
+    background:var(--orange); color:#fff;
+    border-radius:var(--radius-xl);
+    padding: clamp(18px,2.4vw,28px) clamp(20px,2.8vw,32px);
+    cursor:pointer; border:none; text-align:left;
+    display:flex; flex-direction:column; gap:8px;
+    transition: transform .15s ease;
+  }
+  .about-banner:active{ transform:scale(0.985); }
+  .about-banner .eyebrow{
+    text-transform:uppercase; letter-spacing:.08em; font-size:clamp(.72rem,1vw,.85rem);
+    font-weight:700; opacity:.9;
+  }
+  .about-banner p{ margin:0; font-size:clamp(1rem,1.5vw,1.28rem); line-height:1.45; font-weight:500; max-width:56ch; }
+
+  .cards-row{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap: clamp(12px,1.6vw,18px);
+    flex: none;
+  }
+  .nav-card{
+    border:none; border-radius:var(--radius-lg);
+    padding: clamp(16px,2vw,24px);
+    height: clamp(160px, 26vh, 260px);
+    display:flex; flex-direction:column; justify-content:flex-end; gap:10px;
+    text-align:left; cursor:pointer; position:relative;
+    transition: transform .15s ease;
+  }
+  .nav-card:active{ transform:scale(0.98); }
+  .nav-card .icon{ width:clamp(30px,3vw,38px); height:clamp(30px,3vw,38px); }
+  .nav-card h3{ font-size:clamp(1.05rem,1.6vw,1.35rem); }
+  .nav-card span.sub{ font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; opacity:.85; }
+  .nav-card.c-directions{ background:var(--card-blue); color:var(--card-blue-text); }
+  .nav-card.c-teachers{ background:var(--card-sand); color:var(--card-sand-text); }
+  .nav-card.c-schedule{ background:var(--card-green); color:#fff; }
+
+  .prices-bar{
+    background:var(--peach); border-radius:var(--radius-lg);
+    border:none; cursor:pointer;
+    padding: clamp(16px,2vw,22px) clamp(20px,2.4vw,28px);
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    text-align:left; transition: transform .15s ease;
+  }
+  .prices-bar:active{ transform:scale(0.99); }
+  .prices-bar h3{ color:var(--orange); font-size:clamp(1.05rem,1.6vw,1.3rem); }
+  .prices-bar span.sub{ color:#a2582b; font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; display:block; margin-top:4px; }
+  .prices-bar .arrow{ color:var(--orange); flex-shrink:0; }
+  .prices-bar .arrow svg{ width:clamp(24px,2.4vw,30px); height:clamp(24px,2.4vw,30px); }
+
+  /* ---------- SUBVIEW COMMON ---------- */
+  .sub-inner{ padding: clamp(18px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; }
+  .topbar{ display:flex; align-items:center; gap:14px; }
+  .back-btn{
+    display:flex; align-items:center; gap:8px;
+    background:#fff; border:none; border-radius:999px;
+    padding: 10px 18px 10px 14px; cursor:pointer; color:var(--green);
+    font-family:'Montserrat',sans-serif; font-weight:600; font-size:.95rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex-shrink:0;
+  }
+  .back-btn svg{ width:18px; height:18px; }
+  .sub-title{ color:var(--green); font-size:clamp(1.3rem,2.2vw,1.8rem); }
+
+  /* ---------- ABOUT ---------- */
+  .about-photos{
+    display:grid; grid-template-columns:1.3fr 1fr; grid-template-rows:1fr 1fr;
+    gap:14px; border-radius:var(--radius-lg); overflow:hidden;
+    max-height: 42vh;
+  }
+  .about-photos img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .about-photos .p1{ grid-row:1/3; border-radius:var(--radius-md); }
+  .about-photos .p2, .about-photos .p3{ border-radius:var(--radius-md); }
+  .about-photos .p1, .about-photos .p2, .about-photos .p3{ overflow:hidden; }
+
+  .about-text{
+    display:flex; flex-direction:column; gap:16px; max-width:900px;
+  }
+  .about-text p{
+    margin:0; font-size:clamp(.95rem,1.3vw,1.12rem); line-height:1.6; color:var(--text);
+  }
+  .about-text p.lead{ font-family:'Unbounded',sans-serif; font-weight:500; font-size:clamp(1.05rem,1.5vw,1.3rem); color:var(--green); line-height:1.5; }
+  .about-facts{
+    background:#fff; border-radius:var(--radius-md); padding:18px 22px;
+    font-size:clamp(.85rem,1.1vw,1rem); line-height:1.7; color:#4a4636;
+  }
+  .about-contact{
+    color:var(--green); opacity:.7; font-size:.85rem; font-weight:600;
+  }
+
+  /* ---------- DIRECTIONS ---------- */
+  .dir-grid{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap: clamp(12px,1.6vw,18px);
+  }
+  .dir-card{
+    background:#fff; border-radius:var(--radius-lg);
+    padding: clamp(16px,2vw,22px);
+    display:flex; flex-direction:column; gap:10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .dir-card .icon{
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--peach); color:var(--orange); flex-shrink:0;
+  }
+  .dir-card .icon svg{ width:24px; height:24px; }
+  .dir-card h3{ color:var(--green); font-size:clamp(1rem,1.4vw,1.15rem); }
+  .dir-card p{ margin:0; font-size:clamp(.82rem,1.1vw,.95rem); line-height:1.55; color:#5a5a5a; }
+
+  /* ---------- TEACHERS ---------- */
+  .gallery-wrap{
+    flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    position:relative;
+  }
+  .poster-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
+    gap: clamp(10px,1.4vw,16px);
+    padding-bottom:4px;
+  }
+  .poster-card{
+    aspect-ratio:3/4; border-radius:var(--radius-md); overflow:hidden;
+    background:var(--card-sand); border:none; padding:0; cursor:pointer;
+    display:block; width:100%; transition: transform .15s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .poster-card:active{ transform:scale(0.97); }
+  .poster-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .gallery-placeholder{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    padding:30px;
+  }
+  .gallery-placeholder .box{
+    max-width:560px; text-align:center; display:flex; flex-direction:column; gap:14px; align-items:center;
+  }
+  .gallery-placeholder .box .icon{
+    width:56px; height:56px; border-radius:50%; background:var(--card-sand);
+    display:flex; align-items:center; justify-content:center; color:var(--card-sand-text);
+  }
+  .gallery-placeholder .box .icon svg{ width:28px; height:28px; }
+  .gallery-placeholder h3{ color:var(--green); font-size:1.15rem; }
+  .gallery-placeholder p{ margin:0; font-size:.9rem; line-height:1.6; color:#6a6a6a; }
+  .gallery-placeholder code{
+    background:var(--bg); padding:2px 8px; border-radius:6px; font-size:.85rem;
+  }
+
+  .help-btn{
+    width:34px; height:34px; border-radius:50%; border:none;
+    background:#fff; color:var(--green);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    font-family:'Unbounded',sans-serif; font-weight:600; font-size:.9rem;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+    flex-shrink:0; margin-left:auto;
+  }
+
+  /* ---------- LIGHTBOX (просмотр афиши целиком) ---------- */
+  .lightbox{
+    position:absolute; inset:0; background:rgba(28,30,20,0.9);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:20;
+    padding: clamp(20px,4vw,60px);
+  }
+  .lightbox.show{ opacity:1; pointer-events:auto; }
+  .lightbox img{
+    max-width:100%; max-height:100%; border-radius:14px; display:block;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+  }
+  .lightbox-close{
+    position:absolute; top:18px; right:18px; width:42px; height:42px; border-radius:50%;
+    background:rgba(255,255,255,.16); color:#fff; border:none; font-size:1.2rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.16); color:#fff;
+    border:none; font-size:1.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-nav.prev{ left:16px; }
+  .lightbox-nav.next{ right:16px; }
+
+  .help-overlay{
+    position:absolute; inset:0; background:rgba(36,36,36,0.55);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:10;
+    padding:20px;
+  }
+  .help-overlay.show{ opacity:1; pointer-events:auto; }
+  .help-card{
+    background:#fff; border-radius:var(--radius-lg); padding:26px 28px; max-width:520px;
+    max-height:80%; overflow-y:auto;
+  }
+  .help-card h3{ color:var(--green); margin-bottom:12px; font-size:1.15rem; }
+  .help-card ol{ margin:0 0 16px; padding-left:20px; font-size:.9rem; line-height:1.7; color:#3a3a3a; }
+  .help-card p{ font-size:.85rem; color:#6a6a6a; line-height:1.6; margin:0 0 14px;}
+  .help-close{
+    background:var(--green); color:#fff; border:none; border-radius:999px;
+    padding:10px 22px; font-family:'Montserrat',sans-serif; font-weight:600; cursor:pointer;
+  }
+
+  @media (max-width: 760px){
+    .cards-row{ grid-template-columns:1fr; }
+    .dir-grid{ grid-template-columns:1fr 1fr; }
+    .about-photos{ grid-template-columns:1fr 1fr; max-height:34vh; }
+  }
+</style>
+</head>
+<body>
+
+<div id="frame"><div id="shell">
+
+  <!-- ================= HOME ================= -->
+  <section class="view home active" data-view="home">
+    <div class="home-inner">
+      <div class="header">
+        <div class="brand">
+          <div class="mark">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="9" stroke="currentColor" stroke-width="3"/>
+              <ellipse cx="24" cy="24" rx="19" ry="6.5" stroke="currentColor" stroke-width="3" transform="rotate(-18 24 24)"/>
+            </svg>
+          </div>
+          <div class="brand-text"><h1>Yoga Space</h1></div>
+        </div>
+        <div class="location">Чернышевская · 100&nbsp;м от&nbsp;метро</div>
+      </div>
+
+      <button class="about-banner" data-open="about">
+        <span class="eyebrow">о студии</span>
+        <p>Тёплое пространство для&nbsp;практики в&nbsp;историческом центре — без&nbsp;спешки, без&nbsp;оценки, в&nbsp;своём темпе.</p>
+      </button>
+
+      <div class="cards-row">
+        <button class="nav-card c-directions" data-open="directions">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Z" fill="currentColor"/><path d="M9 21l1.6-6.2L8 13l1-4.2c.25-1 .9-1.6 1.9-1.6h2.2c1 0 1.65.6 1.9 1.6L16 13l-2.6 1.8L15 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Направления</h3>
+          <span class="sub">хатха, виньяса, инь и&nbsp;другие</span>
+        </button>
+        <button class="nav-card c-teachers" data-open="teachers">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.5" cy="8" r="2.6" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9.5" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c0-2.8 2.24-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13.7 14.3c2.4.2 4.3 2.2 4.3 4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Преподаватели</h3>
+          <span class="sub">афиши классов и&nbsp;мероприятий</span>
+        </button>
+        <button class="nav-card c-schedule" data-open="schedule">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.6"/><path d="M8 3v3.4M16 3v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Расписание</h3>
+          <span class="sub">на&nbsp;сегодня и&nbsp;неделю</span>
+        </button>
+      </div>
+
+      <button class="prices-bar" data-open="prices">
+        <div>
+          <h3>Цены</h3>
+          <span class="sub">разовые занятия · абонементы · пробное занятие</span>
+        </div>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="view" data-view="about">
+    <div class="sub-inner">
+      <div class="topbar">
+        <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
+        <h2 class="sub-title">О студии</h2>
+      </div>
+
+      <div class="about-photos">
+        <img class="p1" src="assets/about-1.jpg" alt="Медитация в зале Yoga Space">
+        <img class="p2" src="assets/about-2.jpg" alt="Именные шкафчики в раздевалке">
+        <img class="p3" src="assets/about-3.jpg" alt="Уютный уголок студии">
+      </div>
+
+      <div class="about-text">
+        <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни.</p>
+        <p>Йога для&nbsp;нас — это не&nbsp;только физические и&nbsp;дыхательные упражнения на&nbsp;коврике, но&nbsp;и&nbsp;то, каким человеком ты&nbsp;становишься за&nbsp;его пределами. Мы&nbsp;верим в&nbsp;работу над&nbsp;собой и&nbsp;в&nbsp;активное участие в&nbsp;жизни общества.</p>
+        <div class="about-facts">
+          Студия — в&nbsp;историческом здании, в&nbsp;100&nbsp;м от&nbsp;метро Чернышевская. 3&nbsp;зала — на&nbsp;2, 17&nbsp;и&nbsp;25&nbsp;человек. Есть всё необходимое: коврики, блоки, пледы, душ, полотенца, фен и&nbsp;травяной чай.
+        </div>
+        <div class="about-contact">пр. Чернышевского, 18, этаж&nbsp;2 · +7&nbsp;(932)&nbsp;266-18-18 · @yogaspacespb</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIRECTIONS ================= -->
+  <section class="view" data-view="directions">
+    <div class="sub-inner">
+      <div class="topbar">
+        <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
+        <h2 class="sub-title">Направления</h2>
+      </div>
+
+      <div class="dir-grid">
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v6M12 12.5l-4 6M12 12.5l4 6M8 9l4 1 4-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Хатха-йога</h3>
+          <p>Статичные асаны в&nbsp;спокойном темпе — акцент на&nbsp;дыхании и&nbsp;точности позы.</p>
+        </div>
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v4l-5 3M12 10.5l5 3M9 18l3-4.5 3 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Виньяса-флоу</h3>
+          <p>Плавная связка асан в&nbsp;динамике, синхронизированная с&nbsp;дыханием.</p>
+        </div>
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v5M8 9.5l4 2 4-2M8 20l4-8.5 4 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Аштанга</h3>
+          <p>Традиционная силовая практика по&nbsp;фиксированной последовательности.</p>
+        </div>
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v4.5M12 11l-5 2.5v4M12 11l5 2.5v4M9.5 20h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3>Дживамукти</h3>
+          <p>Философское направление с&nbsp;музыкой, мантрами и&nbsp;медитацией.</p>
+        </div>
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12c1.5-3 3-4.5 5-4.5S12 9 12 12s1.5 4.5 3.5 4.5S19 15 20 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4 8.3c1.5-2.2 3-3.3 5-3.3S12 6 12 8.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".55"/><path d="M12 15.7c0 2.3 1.5 3.3 3.5 3.3S19 17.9 20 15.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg></div>
+          <h3>Звукотерапия</h3>
+          <p>Глубокое расслабление под&nbsp;звучание поющих чаш и&nbsp;других инструментов.</p>
+        </div>
+        <div class="dir-card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v3.5M7 12.5c0 3 2.2 5.5 5 5.5s5-2.5 5-5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 10c-2.8 0-5 1.1-5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <h3>Инь-йога</h3>
+          <p>Медленная практика с&nbsp;долгим удержанием поз для&nbsp;мягкой растяжки.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEACHERS ================= -->
+  <section class="view" data-view="teachers">
+    <div class="sub-inner" style="flex:1; min-height:0;">
+      <div class="topbar">
+        <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
+        <h2 class="sub-title">Преподаватели и&nbsp;мероприятия</h2>
+        <button class="help-btn" id="help-open-btn">?</button>
+      </div>
+
+      <div class="gallery-wrap" id="gallery-wrap">
+        <!-- сетка афиш / плейсхолдер / лайтбокс — рисуются JS -->
+      </div>
+    </div>
+
+    <div class="help-overlay" id="help-overlay">
+      <div class="help-card">
+        <h3>Как добавить или&nbsp;убрать афишу</h3>
+        <p>Галерея — это общая папка на&nbsp;Яндекс.Диске. Ничего программировать не&nbsp;нужно.</p>
+        <ol>
+          <li>Откройте папку на&nbsp;Яндекс.Диске (ссылка сохранена в&nbsp;заметках/у администратора).</li>
+          <li>Чтобы добавить афишу — просто загрузите фото в&nbsp;эту папку с&nbsp;телефона или&nbsp;компьютера.</li>
+          <li>Чтобы убрать — удалите файл из&nbsp;папки.</li>
+          <li>Планшет подтянет изменения при&nbsp;следующем открытии раздела «Преподаватели».</li>
+        </ol>
+        <p><strong>Порядок афиш.</strong> Чтобы у&nbsp;мероприятия была своя дата — начните имя файла с&nbsp;даты: <code>20.08.2026_Название.jpg</code>. Ближайшие даты покажутся первыми, файлы без&nbsp;даты (регулярные классы) — после них, а прошедшие даты уедут в&nbsp;конец. Само имя файла на&nbsp;экране не&nbsp;видно — оно нужно только для сортировки.</p>
+        <p>Настройка «под ключ» (один раз): создать папку на&nbsp;Яндекс.Диске → правая кнопка мыши → «Поделиться» → «Скопировать ссылку» → вставить эту ссылку в&nbsp;файл <code>dashboard.html</code> в&nbsp;строку <code>YANDEX_PUBLIC_KEY</code>. Афиши — вертикальные фото (jpg/png), лучше не&nbsp;класть в&nbsp;эту папку ничего лишнего: покажется всё, что в&nbsp;ней лежит.</p>
+        <button class="help-close" id="help-close-btn">Понятно</button>
+      </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+      <button class="lightbox-close" id="lightbox-close">✕</button>
+      <button class="lightbox-nav prev" id="lightbox-prev">‹</button>
+      <img id="lightbox-img" src="" alt="">
+      <button class="lightbox-nav next" id="lightbox-next">›</button>
+    </div>
+  </section>
+
+  <!-- ================= РАСПИСАНИЕ ================= -->
+  <section class="view" data-view="schedule">
+    <div class="sub-inner" style="gap:0;">
+      <div class="topbar" style="margin-bottom:14px;">
+        <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
+        <h2 class="sub-title">Расписание</h2>
+      </div>
+
+      <!-- ==== живой виджет расписания Reservi, тот же, что на yogaspace.ru/timetablespb ====
+           Тянет реальные данные с сервера Reservi по salon-id студии Чернышевская,
+           поэтому расписание всегда актуальное — ничего вручную обновлять не нужно. -->
+      <div data-fit1c-calendar="" class="_block_schedule"></div>
+      <script src="https://static.tildacdn.com/js/jquery-1.10.2.min.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib.min.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/1.12.1.jquery-ui.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/merge_lib.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/fancybox.fit.min.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/cookie.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/tools.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/events.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/auth.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/payment.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/include/ScheduleAuth.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/lib/api-fit.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+      <script src="https://reservi.ru/widget-fit1c.v2/js/config.js" data-fit-salon-id="923e01c0-6bbd-4e62-a651-f62e80f8b539"></script>
+      <!-- ==== конец виджета расписания ==== -->
+    </div>
+  </section>
+
+  <!-- ================= ЦЕНЫ ================= -->
+  <section class="view" data-view="prices">
+    <div class="sub-inner" style="gap:0;">
+      <div class="topbar" style="margin-bottom:-8px;">
+        <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
+      </div>
+
+      <!-- ==== блок цен, скопирован как есть из yogaspace.ru/petersburg (виджет Тильды) ==== -->
+      <div class="ysp-root" id="ysp-mini" data-studio="spb">
+        <div class="ysp-wrap">
+
+          <div class="ysp-head">
+            <h2 class="ysp-h2" id="ysp-mini-title">Цены на занятия</h2>
+            <p class="ysp-lead" id="ysp-mini-sub">Выбери абонемент — покажем подходящие варианты</p>
+          </div>
+
+          <div class="ysp-tabs" id="ysp-mini-tabs" role="tablist" aria-label="Формат занятий"></div>
+
+          <div class="ysp-first" id="ysp-mini-first"></div>
+
+          <div class="ysp-panel" id="ysp-mini-panel" aria-live="polite"></div>
+
+          <div class="ysp-foot">
+            <a class="ysp-link" href="https://yogaspace.ru/price"><span>Все цены, условия и спецпредложения</span></a>
+            <a class="ysp-btn" href="https://yogaspace.ru/cabinetspb"><span>Подобрать абонемент</span></a>
+          </div>
+
+        </div>
+      </div>
+
+      <style>
+        #ysp-mini{
+          --ysp-cream:#FAF6EF; --ysp-sand:#F3EDE0; --ysp-olive:#5C6937;
+          --ysp-orange:#F0803B; --ysp-blue:#BBD9E8; --ysp-ink:#2C3122;
+          --ysp-muted:#7E846E; --ysp-line:rgba(92,105,55,.16); --ysp-r:18px;
+        }
+        #ysp-mini,#ysp-mini *{box-sizing:border-box;}
+        #ysp-mini{
+          font-family:'Montserrat',Arial,sans-serif;color:var(--ysp-ink);background:var(--ysp-cream);
+          padding-top:8px;padding-bottom:40px;padding-left:0;padding-right:0;
+          -webkit-font-smoothing:antialiased;
+        }
+        #ysp-mini a{text-decoration:none;color:inherit;}
+        #ysp-mini button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit;}
+        #ysp-mini .ysp-wrap{max-width:960px;margin-left:auto;margin-right:auto;}
+        #ysp-mini .ysp-head{margin-bottom:24px;}
+        #ysp-mini .ysp-h2{
+          font-family:'Unbounded',Arial,sans-serif;font-weight:500;font-size:26px;
+          line-height:1.2;letter-spacing:-.01em;margin:0 0 9px;
+        }
+        #ysp-mini .ysp-lead{font-size:15px;color:var(--ysp-muted);margin:0;line-height:1.5;}
+
+        #ysp-mini .ysp-tabs{display:flex;gap:4px;background:var(--ysp-sand);padding:4px;border-radius:100px;flex-wrap:wrap;}
+        #ysp-mini .ysp-tab{
+          flex:1 1 auto;min-width:130px;text-align:center;
+          padding-top:13px;padding-bottom:13px;padding-left:14px;padding-right:14px;
+          border-radius:100px;font-size:14px;font-weight:600;line-height:1.2;color:var(--ysp-muted);
+          transition:background .18s ease,color .18s ease;
+        }
+        #ysp-mini .ysp-tab.is-active{background:#fff;color:var(--ysp-ink);box-shadow:0 2px 10px rgba(44,49,34,.07);}
+
+        #ysp-mini .ysp-first{margin-top:22px;}
+        #ysp-mini .ysp-first__in{
+          display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:var(--ysp-blue);
+          border-radius:var(--ysp-r);padding-top:18px;padding-bottom:18px;padding-left:24px;padding-right:24px;
+        }
+        #ysp-mini .ysp-first__body{flex:1 1 260px;}
+        #ysp-mini .ysp-first__t{font-family:'Unbounded',Arial,sans-serif;font-size:15px;font-weight:500;margin:0 0 4px;}
+        #ysp-mini .ysp-first__d{font-size:12.5px;line-height:1.45;color:#41482F;margin:0;}
+        #ysp-mini .ysp-first__price{font-family:'Unbounded',Arial,sans-serif;font-size:22px;white-space:nowrap;}
+        #ysp-mini .ysp-old{font-size:13px;color:var(--ysp-muted);text-decoration:line-through;margin-left:8px;font-weight:400;}
+        #ysp-mini .ysp-first__price .ysp-old{color:#5C6937;opacity:.6;}
+
+        #ysp-mini .ysp-panel{margin-top:22px;}
+        #ysp-mini .ysp-sechead__h{
+          font-family:'Unbounded',Arial,sans-serif;font-weight:500;font-size:17px;
+          line-height:1.3;margin:0 0 5px;color:var(--ysp-ink);
+        }
+        #ysp-mini .ysp-sechead__t{
+          font-family:'Lora',Georgia,serif;font-style:italic;font-size:18px;
+          color:var(--ysp-olive);margin:0 0 14px;line-height:1.3;
+        }
+        #ysp-mini .ysp-subhead{margin-top:24px;margin-bottom:12px;}
+        #ysp-mini .ysp-subhead__t{font-size:14.5px;font-weight:700;margin:0;}
+        #ysp-mini .ysp-subhead__d{font-size:12.5px;color:var(--ysp-muted);line-height:1.45;margin:4px 0 0;}
+        #ysp-mini .ysp-pills{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+        #ysp-mini .ysp-step__label--sub{
+          font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ysp-muted);
+          margin-bottom:9px;font-weight:600;
+        }
+        #ysp-mini .ysp-pill{
+          padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;
+          border-radius:100px;background:#fff;border:1px solid var(--ysp-line);
+          font-size:13.5px;font-weight:500;transition:background .18s,color .18s,border-color .18s;
+        }
+        #ysp-mini .ysp-pill.is-active{background:var(--ysp-olive);color:#fff;border-color:var(--ysp-olive);}
+
+        #ysp-mini .ysp-rows{display:flex;flex-direction:column;gap:10px;}
+        #ysp-mini .ysp-row{
+          display:grid;grid-template-columns:minmax(0,1.4fr) 170px 140px 140px;
+          align-items:center;gap:14px;background:#fff;border:1px solid var(--ysp-line);
+          border-radius:var(--ysp-r);
+          padding-top:16px;padding-bottom:16px;padding-left:22px;padding-right:16px;
+          transition:border-color .18s,box-shadow .18s;
+        }
+        #ysp-mini .ysp-row:hover{border-color:rgba(92,105,55,.35);box-shadow:0 6px 22px rgba(44,49,34,.06);}
+        #ysp-mini .ysp-row--best{border-color:var(--ysp-orange);background:#FFFBF7;}
+        #ysp-mini .ysp-row__name{font-size:15.5px;font-weight:600;line-height:1.25;margin:0 0 5px;}
+        #ysp-mini .ysp-row__term{font-size:12.5px;color:var(--ysp-muted);margin:0;line-height:1.35;}
+        #ysp-mini .ysp-badge{
+          display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+          border-radius:100px;padding-top:4px;padding-bottom:4px;padding-left:10px;padding-right:10px;
+          margin-bottom:7px;margin-right:6px;
+        }
+        #ysp-mini .ysp-badge--best{background:var(--ysp-orange);color:#fff;}
+        #ysp-mini .ysp-badge--reg{background:var(--ysp-blue);color:#33402C;}
+        #ysp-mini .ysp-unit{font-family:'Unbounded',Arial,sans-serif;font-size:22px;line-height:1.1;white-space:nowrap;}
+        #ysp-mini .ysp-unit__lbl,#ysp-mini .ysp-total__lbl{font-size:12px;color:var(--ysp-muted);margin-top:4px;display:block;font-weight:400;}
+        #ysp-mini .ysp-save{
+          display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--ysp-olive);
+          background:rgba(92,105,55,.1);border-radius:100px;
+          padding-top:3px;padding-bottom:3px;padding-left:9px;padding-right:9px;
+        }
+        #ysp-mini .ysp-total{font-size:16.5px;font-weight:600;white-space:nowrap;}
+        #ysp-mini .ysp-note{font-size:12.5px;color:var(--ysp-muted);line-height:1.4;}
+
+        #ysp-mini .ysp-promo{
+          display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:var(--ysp-sand);
+          border-radius:var(--ysp-r);padding-top:20px;padding-bottom:20px;padding-left:24px;padding-right:24px;margin-bottom:14px;
+        }
+        #ysp-mini .ysp-promo__body{flex:1 1 260px;}
+        #ysp-mini .ysp-promo__t{font-family:'Unbounded',Arial,sans-serif;font-size:15px;font-weight:500;margin:0 0 5px;}
+        #ysp-mini .ysp-promo__d{font-size:13px;color:#4A5040;line-height:1.5;margin:0;}
+        #ysp-mini .ysp-promo__price{font-family:'Unbounded',Arial,sans-serif;font-size:21px;white-space:nowrap;}
+
+        #ysp-mini .ysp-btn{
+          display:inline-flex;align-items:center;justify-content:center;background:var(--ysp-orange);color:#fff;
+          border-radius:100px;padding-top:13px;padding-bottom:13px;padding-left:26px;padding-right:26px;
+          font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;line-height:1;
+          text-decoration:none;white-space:nowrap;transition:background .18s;
+        }
+        #ysp-mini .ysp-btn span{color:#fff;}
+        #ysp-mini .ysp-btn:hover,#ysp-mini .ysp-btn:focus,#ysp-mini .ysp-btn:active{background:#DE6D28;color:#fff;text-decoration:none;}
+        #ysp-mini .ysp-btn:hover span{color:#fff;}
+        #ysp-mini .ysp-btn--full{width:100%;}
+
+        #ysp-mini .ysp-foot .ysp-btn{background:var(--ysp-olive);}
+        #ysp-mini .ysp-foot .ysp-btn:hover,#ysp-mini .ysp-foot .ysp-btn:focus,#ysp-mini .ysp-foot .ysp-btn:active{background:#4B5630;}
+
+        #ysp-mini .ysp-foot{
+          margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+        }
+        #ysp-mini .ysp-link{
+          font-size:14px;font-weight:600;color:var(--ysp-olive);
+          border-bottom:1px solid rgba(92,105,55,.35);padding-bottom:2px;
+        }
+        #ysp-mini .ysp-link span{color:var(--ysp-olive);}
+        #ysp-mini .ysp-link:hover{border-color:var(--ysp-olive);}
+
+        @media screen and (max-width:760px){
+          #ysp-mini .ysp-h2{font-size:22px;}
+          #ysp-mini .ysp-tab{min-width:0;flex:1 1 45%;font-size:13px;}
+          #ysp-mini .ysp-row{grid-template-columns:1fr;gap:12px;padding-left:20px;padding-right:20px;}
+          #ysp-mini .ysp-row__cell--unit{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-top:1px solid var(--ysp-line);padding-top:12px;}
+          #ysp-mini .ysp-unit__lbl,#ysp-mini .ysp-total__lbl{display:inline;margin-top:0;}
+          #ysp-mini .ysp-row__cell--total{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+          #ysp-mini .ysp-row__cell--total .ysp-old{margin-left:0;}
+          #ysp-mini .ysp-foot .ysp-btn{width:100%;}
+          #ysp-mini .ysp-row__cell:empty{display:none;}
+          #ysp-mini .ysp-first__in,#ysp-mini .ysp-promo{
+            flex-direction:column;align-items:flex-start;gap:14px;
+            padding-left:20px;padding-right:20px;
+          }
+          #ysp-mini .ysp-first__body,#ysp-mini .ysp-promo__body{flex:0 1 auto;width:100%;}
+          #ysp-mini .ysp-first__in .ysp-btn,#ysp-mini .ysp-promo .ysp-btn{width:100%;}
+          #ysp-mini .ysp-first__price,#ysp-mini .ysp-promo__price{font-size:20px;}
+          #ysp-mini .ysp-sechead__h{font-size:16px;}
+          #ysp-mini .ysp-pills .ysp-pill{flex:1 1 auto;text-align:center;}
+        }
+        @media (prefers-reduced-motion:reduce){#ysp-mini *{transition:none !important;}}
+      </style>
+
+      <script>
+      (function(){
+        "use strict";
+        var CABINET_SPB='https://yogaspace.ru/cabinetspb';
+
+        // Данные только студии Чернышевская (СПб). Чтобы обновить цены — зайдите
+        // на price-артефакт в Claude, откройте вкладку «Код», скопируйте объект
+        // S.spb целиком и замените блок ниже.
+        var d = {name:'Чернышевская',
+          trial:{price:1000,old:1400},
+          group:[{n:1,title:'1 занятие',term:'Срок действия — 1 месяц',total:1400,url:CABINET_SPB},
+                 {n:5,title:'5 занятий',term:'Срок действия — 5 недель',total:6250,url:CABINET_SPB},
+                 {n:10,title:'10 занятий',term:'Срок действия — 10 недель',total:11500,url:CABINET_SPB,badge:'reg'},
+                 {n:20,title:'20 занятий',term:'Срок действия — 140 дней',total:20900,url:CABINET_SPB,badge:'best'}],
+          unlim:[{m:1,title:'1 месяц',total:16900,url:CABINET_SPB},{m:3,title:'3 месяца',total:41500,url:CABINET_SPB},
+                 {m:6,title:'6 месяцев',total:77000,url:CABINET_SPB,badge:'reg'},{m:12,title:'12 месяцев',total:110000,url:CABINET_SPB,badge:'best'}],
+          one:{n:3,total:13500,old:18000,url:CABINET_SPB},
+          ind:{60:[{n:1,title:'1 занятие',total:6000,url:CABINET_SPB},{n:5,title:'5 занятий',total:28000,url:CABINET_SPB,badge:'reg'},{n:10,title:'10 занятий',total:52000,url:CABINET_SPB,badge:'best'}],
+               90:[{n:1,title:'1 занятие',total:6500,url:CABINET_SPB},{n:5,title:'5 занятий',total:31000,url:CABINET_SPB,badge:'reg'},{n:10,title:'10 занятий',total:58000,url:CABINET_SPB,badge:'best'}]},
+          myClasses:[{n:1,title:'1 занятие',term:'',total:1400,url:CABINET_SPB}],
+          myUnlim:[{m:1,title:'1 месяц',total:10800,url:CABINET_SPB},{m:3,title:'3 месяца',total:29500,url:CABINET_SPB,badge:'best'}],
+          special:[]
+        };
+
+        var root = document.getElementById('ysp-mini');
+        if(!root) return;
+        var state = {tab:'group', sub:'packs'};
+
+        function tabsFor(){ return [{id:'group',t:'Групповые'},{id:'ind',t:'Индивидуальные'}]; }
+        function subList(){
+          var l=[];
+          if(state.tab==='group'){
+            if(d.group.length) l.push({id:'packs',t:'По количеству занятий'});
+            if(d.unlim.length) l.push({id:'unlim',t:'Безлимиты'});
+            if(d.myClasses.length||d.myUnlim.length) l.push({id:'mysore',t:'Майсор'});
+            if(d.special.length) l.push({id:'special',t:'Специальные классы'});
+          }
+          return l;
+        }
+        function normSub(){
+          var l=subList(); if(!l.length) return;
+          for(var i=0;i<l.length;i++){ if(l[i].id===state.sub) return; }
+          state.sub=l[0].id;
+        }
+        function subSwitch(){
+          var l=subList(); if(l.length<2) return '';
+          var h='<div class="ysp-pills">';
+          l.forEach(function(x){
+            h+='<button class="ysp-pill'+(x.id===state.sub?' is-active':'')+'" data-sub="'+x.id+'" type="button">'+esc(x.t)+'</button>';
+          });
+          return h+'</div>';
+        }
+
+        function money(n){return Math.round(n).toLocaleString('ru-RU')+' ₽';}
+        function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+        var TYPO_W = 'в|во|а|и|к|ко|о|об|от|по|до|за|из|на|не|ни|но|с|со|у|то|же|ли|бы|'+
+                     'я|мы|ты|вы|их|её|ее|для|без|под|над|при|про|или|что|как|уже|ещё';
+        var TYPO_RE = new RegExp('(^|[\\s(«„])(' + TYPO_W + ')[ \\t]+', 'gi');
+        function typo(node){
+          if(!node || !document.createTreeWalker) return;
+          var walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false), t;
+          while((t = walker.nextNode())){
+            var v = t.nodeValue;
+            if(!v || v.indexOf(' ') === -1) continue;
+            var n = v.replace(/ — /g, ' — ')
+                     .replace(TYPO_RE, '$1$2 ')
+                     .replace(TYPO_RE, '$1$2 ')
+                     .replace(TYPO_RE, '$1$2 ')
+                     .replace(/(\d)\s+(?=[А-Яа-яЁё])/g, '$1 ')
+                     .replace(/(\d)[\s ]+(?=\d)/g, '$1 ')
+                     .replace(/(\d)[\s ]+(?=[₽%])/g, '$1 ');
+            if(n !== v) t.nodeValue = n;
+          }
+        }
+
+        function row(o){
+          var h='<div class="ysp-row'+(o.badge==='best'?' ysp-row--best':'')+'">';
+          h+='<div class="ysp-row__cell">';
+          if(o.badge==='best') h+='<span class="ysp-badge ysp-badge--best">Самый выгодный</span>';
+          if(o.badge==='reg')  h+='<span class="ysp-badge ysp-badge--reg">Для регулярной практики</span>';
+          h+='<p class="ysp-row__name">'+esc(o.title)+'</p>';
+          if(o.term) h+='<p class="ysp-row__term">'+esc(o.term)+'</p>';
+          h+='</div>';
+          h+='<div class="ysp-row__cell ysp-row__cell--unit"><span class="ysp-unit">'+o.unit+'</span>'+
+             '<span class="ysp-unit__lbl">'+esc(o.unitLabel)+'</span>'+
+             (o.save?'<span class="ysp-save">'+esc(o.save)+'</span>':'')+'</div>';
+          h+='<div class="ysp-row__cell ysp-row__cell--total">'+(o.total?'<span class="ysp-total">'+o.total+'</span>'+
+             '<span class="ysp-total__lbl">'+esc(o.totalLabel||'за абонемент')+'</span>':'')+'</div>';
+          h+='<div class="ysp-row__cell">'+
+             (o.note?'<p class="ysp-note">'+esc(o.note)+'</p>'
+                    :'<a class="ysp-btn ysp-btn--full" href="'+(o.url||'#')+'"><span>Купить</span></a>')+'</div>';
+          return h+'</div>';
+        }
+
+        function classTable(items){
+          if(!items||!items.length) return '';
+          var base=items[0].total/items[0].n, h='<div class="ysp-rows">';
+          items.forEach(function(it){
+            var unit=it.total/it.n, save=it.n>1?Math.round((1-unit/base)*100):0;
+            h+=row({title:it.title,term:it.term,unit:money(unit),unitLabel:'за занятие',
+              save:save>=3?'−'+save+'% к цене разового':'',total:it.n>1?money(it.total):'',
+              totalLabel:'за абонемент',badge:it.badge,url:it.url});
+          });
+          return h+'</div>';
+        }
+
+        function unlimTable(items,term){
+          if(!items||!items.length) return '';
+          var base=items[0].total/items[0].m, h='<div class="ysp-rows">';
+          items.forEach(function(it){
+            var perM=it.total/it.m, exact=(it.total%it.m===0), save=it.m>1?Math.round((1-perM/base)*100):0;
+            h+=row({title:it.title,term:term,unit:(exact?'':'≈')+money(Math.round(perM/100)*100),unitLabel:'в месяц',
+              save:save>=3?'−'+save+'% к цене месяца':'',total:it.m>1?money(it.total):'',badge:it.badge,url:it.url});
+          });
+          return h+'</div>';
+        }
+
+        function subhead(title,hint){
+          return '<div class="ysp-subhead"><p class="ysp-subhead__t">'+esc(title)+'</p>'+
+                 (hint?'<p class="ysp-subhead__d">'+esc(hint)+'</p>':'')+'</div>';
+        }
+        function head(title,hint){
+          return '<p class="ysp-sechead__h">'+esc(title)+'</p>'+
+                 (hint?'<p class="ysp-sechead__t">'+esc(hint)+'</p>':'');
+        }
+
+        function panel(){
+          normSub();
+          if(state.tab==='group'){
+            var h = subSwitch();
+            if(state.sub==='unlim'){
+              h += head('Безлимитные абонементы','Практикуй без ограничений')+
+                   unlimTable(d.unlim,'Безлимитное посещение групповых классов');
+            }
+            else if(state.sub==='mysore'){
+              h += head('Майсор','Утренние классы самостоятельной практики');
+              if(d.myClasses.length){
+                if(d.myUnlim.length) h += subhead('По количеству занятий','');
+                h += classTable(d.myClasses);
+              }
+              if(d.myUnlim.length){
+                if(d.myClasses.length) h += subhead('Безлимиты','');
+                h += unlimTable(d.myUnlim,'Безлимитное посещение утренних майсор-классов');
+              }
+            }
+            else if(state.sub==='special'){
+              h += head('Специальные классы','Разовые занятия этого пространства — абонементы на них не действуют')+
+                   '<div class="ysp-rows">';
+              d.special.forEach(function(x){
+                h += row({title:x.title,term:'',unit:money(x.total),unitLabel:'разовое посещение',total:'',note:x.note});
+              });
+              h += '</div>';
+            }
+            else {
+              h += head('Абонементы по количеству занятий','Чем больше абонемент, тем выгоднее одно занятие')+classTable(d.group);
+            }
+            return h;
+          }
+          var o=d.one;
+          var h2='<div class="ysp-promo"><div class="ysp-promo__body">'+
+            '<p class="ysp-promo__t">«Один на один» — для новых гостей</p>'+
+            '<p class="ysp-promo__d">'+o.n+' индивидуальных занятия по 60 минут · '+money(o.total/o.n)+' за занятие</p></div>'+
+            '<div class="ysp-promo__price">'+money(o.total)+'<span class="ysp-old">'+money(o.old)+'</span></div>'+
+            '<a class="ysp-btn" href="'+o.url+'"><span>Купить</span></a></div>';
+          h2 += head('Индивидуальные занятия','Чем больше абонемент, тем выгоднее одно занятие');
+          h2 += subhead('60 минут','')  + classTable(d.ind[60]);
+          h2 += subhead('90 минут','')  + classTable(d.ind[90]);
+          return h2;
+        }
+
+        function render(){
+          document.getElementById('ysp-mini-title').textContent='Цены — Yoga Space '+d.name;
+          document.getElementById('ysp-mini-tabs').innerHTML=tabsFor().map(function(t){
+            return '<button class="ysp-tab'+(t.id===state.tab?' is-active':'')+'" data-tab="'+t.id+'" type="button">'+esc(t.t)+'</button>';
+          }).join('');
+          document.getElementById('ysp-mini-first').innerHTML= state.tab==='ind' ? '' :
+            '<div class="ysp-first__in"><div class="ysp-first__body">'+
+            '<p class="ysp-first__t">Впервые в Yoga Space?</p>'+
+            '<p class="ysp-first__d">В день первого посещения можно купить групповой абонемент от 10 занятий со скидкой 20%.</p></div>'+
+            '<div class="ysp-first__price">'+money(d.trial.price)+'<span class="ysp-old">'+money(d.trial.old)+'</span></div>'+
+            '<a class="ysp-btn" href="'+CABINET_SPB+'"><span>Записаться на пробное</span></a></div>';
+          document.getElementById('ysp-mini-panel').innerHTML=panel();
+          typo(root);
+        }
+
+        root.addEventListener('click',function(e){
+          var t=e.target.closest?e.target.closest('button'):null;
+          if(!t) return;
+          if(t.dataset.tab){state.tab=t.dataset.tab;render();return;}
+          if(t.dataset.sub){state.sub=t.dataset.sub;render();return;}
+        });
+
+        render();
+        typo(root);
+      })();
+      </script>
+      <!-- ==== конец блока цен ==== -->
+    </div>
+  </section>
+
+</div></div>
+
+<script>
+  // ====== НАСТРОЙКИ (заполнить один раз) ======
+  const CONFIG = {
+    // Публичная ссылка на папку Яндекс.Диска с афишами преподавателей и мероприятий.
+    // Как получить: создайте папку на Яндекс.Диске → «Поделиться» →
+    // «Скопировать ссылку» → вставьте сюда всю ссылку целиком
+    // (вида https://disk.yandex.ru/d/xxxxxxxxxxxxxx).
+    YANDEX_PUBLIC_KEY: 'https://disk.360.yandex.ru/d/xbNiBpuYnC6ebQ',
+  };
+
+  // ---- view switching ----
+  const views = document.querySelectorAll('.view');
+  function openView(name){
+    views.forEach(v => v.classList.toggle('active', v.dataset.view === name));
+    const wrap = document.getElementById('gallery-wrap');
+    if(name === 'teachers' && !wrap.dataset.loaded){
+      renderGallery();
+      wrap.dataset.loaded = '1';
+    }
+  }
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.preventDefault();
+      openView(el.dataset.open);
+    });
+  });
+
+  // ---- gallery (Yandex Disk public folder → own vertical-poster grid) ----
+  let posterItems = [];
+
+  function galleryMessage(iconSvg, title, text){
+    const ph = document.createElement('div');
+    ph.className = 'gallery-placeholder';
+    ph.innerHTML = `
+      <div class="box">
+        <div class="icon">${iconSvg}</div>
+        <h3>${title}</h3>
+        ${text ? `<p>${text}</p>` : ''}
+      </div>`;
+    return ph;
+  }
+  const ICON_IMG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 15l4.5-4 4 3.5L16 10l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="9" r="1.4" fill="currentColor"/></svg>';
+  const ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v4.5M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.6 4.6c.6-1 2.2-1 2.8 0l8 13.6c.6 1-.2 2.3-1.4 2.3H4c-1.2 0-2-1.3-1.4-2.3l8-13.6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+
+  // Дата из начала имени файла: "20.08.2026_Название.jpg" → Date(2026-08-20).
+  // Без даты в имени — файл считается «регулярным» (без привязки к числу).
+  function parseDatePrefix(name){
+    const m = String(name).match(/^(\d{1,2})[.\-](\d{1,2})[.\-](\d{2,4})/);
+    if(!m) return null;
+    let [, d, mo, y] = m;
+    d = Number(d); mo = Number(mo); y = Number(y);
+    if(y < 100) y += 2000;
+    const date = new Date(y, mo - 1, d);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  // Сортировка галереи: 1) будущие/сегодняшние афиши с датой — ближе дата вперёд;
+  // 2) афиши без даты (регулярные классы) — новее загруженные вперёд;
+  // 3) афиши с прошедшей датой — в самый конец, самые недавние прошедшие впереди.
+  function sortPosters(items){
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const withMeta = items.map(it => ({ it, date: parseDatePrefix(it.name) }));
+    function tier(x){
+      if(x.date === null) return 1;
+      return x.date.getTime() >= today.getTime() ? 0 : 2;
+    }
+    withMeta.sort((a, b) => {
+      const ta = tier(a), tb = tier(b);
+      if(ta !== tb) return ta - tb;
+      if(ta === 0) return a.date - b.date;
+      if(ta === 2) return b.date - a.date;
+      return new Date(b.it.modified) - new Date(a.it.modified);
+    });
+    return withMeta.map(x => x.it);
+  }
+
+  async function renderGallery(){
+    const wrap = document.getElementById('gallery-wrap');
+    wrap.innerHTML = '';
+
+    if(!CONFIG.YANDEX_PUBLIC_KEY){
+      wrap.appendChild(galleryMessage(ICON_IMG, 'Галерея ещё не&nbsp;подключена',
+        'Нажмите «?» рядом с&nbsp;заголовком — там инструкция, как&nbsp;подключить папку Яндекс.Диска и&nbsp;дальше самостоятельно добавлять афиши без&nbsp;программиста.'));
+      return;
+    }
+
+    wrap.appendChild(galleryMessage(ICON_IMG, 'Загружаем афиши…', ''));
+
+    try{
+      const apiUrl = 'https://cloud-api.yandex.net/v1/disk/public/resources?' +
+        'public_key=' + encodeURIComponent(CONFIG.YANDEX_PUBLIC_KEY) +
+        '&limit=200&preview_size=XXL';
+      const res = await fetch(apiUrl);
+      if(!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      const items = (data._embedded && data._embedded.items) || [];
+
+      // Афиша — картинка (jpg/png) или PDF (Яндекс.Диск сам делает JPEG-превью
+      // первой страницы, так что PDF-постеры из Canva показываются как есть).
+      posterItems = sortPosters(items.filter(it =>
+        it.type === 'file' && it.preview &&
+        (String(it.mime_type).indexOf('image/') === 0 || it.mime_type === 'application/pdf')
+      ));
+
+      wrap.innerHTML = '';
+
+      if(!posterItems.length){
+        wrap.appendChild(galleryMessage(ICON_IMG, 'В папке пока нет&nbsp;афиш',
+          'Загрузите фото в&nbsp;папку на&nbsp;Яндекс.Диске — они появятся здесь.'));
+        return;
+      }
+
+      const grid = document.createElement('div');
+      grid.className = 'poster-grid';
+      posterItems.forEach((it, i) => {
+        const card = document.createElement('button');
+        card.className = 'poster-card';
+        card.innerHTML = `<img src="${it.preview}" alt="${escapeHtml(it.name)}" loading="lazy">`;
+        card.addEventListener('click', () => openLightbox(i));
+        grid.appendChild(card);
+      });
+      wrap.appendChild(grid);
+
+    } catch(err){
+      wrap.innerHTML = '';
+      wrap.appendChild(galleryMessage(ICON_WARN, 'Не&nbsp;удалось загрузить афиши',
+        'Проверьте подключение планшета к&nbsp;интернету и&nbsp;ссылку на&nbsp;папку Яндекс.Диска в&nbsp;настройках.'));
+    }
+  }
+
+  // ---- lightbox (просмотр афиши целиком) ----
+  let lbIndex = 0;
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  function updateLightbox(){
+    lbImg.src = posterItems[lbIndex].preview;
+    lbImg.alt = posterItems[lbIndex].name;
+  }
+  function openLightbox(i){
+    lbIndex = i;
+    updateLightbox();
+    lightbox.classList.add('show');
+  }
+  document.getElementById('lightbox-close').addEventListener('click', () => lightbox.classList.remove('show'));
+  document.getElementById('lightbox-prev').addEventListener('click', () => {
+    lbIndex = (lbIndex - 1 + posterItems.length) % posterItems.length;
+    updateLightbox();
+  });
+  document.getElementById('lightbox-next').addEventListener('click', () => {
+    lbIndex = (lbIndex + 1) % posterItems.length;
+    updateLightbox();
+  });
+  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('show'); });
+
+  // ---- help overlay ----
+  const helpOverlay = document.getElementById('help-overlay');
+  document.getElementById('help-open-btn').addEventListener('click', ()=> helpOverlay.classList.add('show'));
+  document.getElementById('help-close-btn').addEventListener('click', ()=> helpOverlay.classList.remove('show'));
+</script>
+</body>
+</html>
