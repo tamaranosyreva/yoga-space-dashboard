@@ -81,12 +81,8 @@
   .header{
     display:flex; align-items:center;
   }
-  .brand{ display:flex; align-items:center; gap:10px; }
-  .brand .mark{
-    width:clamp(38px,3.8vw,48px); height:clamp(38px,3.8vw,48px);
-    color:var(--ink); flex-shrink:0;
-  }
-  .brand-text h1{ font-size:clamp(1.3rem,2vw,1.7rem); }
+  .brand{ display:flex; align-items:center; }
+  .brand .logo-full{ height:clamp(26px,2.6vw,34px); width:auto; display:block; }
 
   .about-banner{
     background:var(--orange);
@@ -310,11 +306,7 @@
     <div class="home-inner">
       <div class="header">
         <div class="brand">
-          <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="9" stroke="currentColor" stroke-width="3"/>
-            <ellipse cx="24" cy="24" rx="19" ry="6.5" stroke="currentColor" stroke-width="3" transform="rotate(-18 24 24)"/>
-          </svg>
-          <div class="brand-text"><h1>Yoga Space</h1></div>
+          <img class="logo-full" src="assets/logo-full.svg" alt="Yoga Space">
         </div>
       </div>
 
@@ -325,17 +317,17 @@
 
       <div class="cards-row">
         <button class="nav-card c-directions" data-open="directions">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M15.2 8.8l-2.1 4.3-4.3 2.1 2.1-4.3 4.3-2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+          <svg class="icon" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M48.1479 68.7953L78.5583 48.1245C79.42 47.4797 80.1778 46.7342 80.8317 45.8878C83.0592 43.0003 83.0133 38.9899 81.6017 35.6349C79.9994 31.853 77.316 28.6285 73.8882 26.3658C70.4603 24.1031 66.4406 22.903 62.3333 22.9161C58.0433 22.9161 54.0604 24.1995 50.7467 26.3903L18.2967 49.3024" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M27.4771 61.9056C27.4771 65.0956 29.1683 71.4344 36.8271 73.1761C41.4425 74.2211 54.8762 69.8073 48.3037 57.0106C41.7312 44.214 25.905 44.1452 19.4654 48.4352C15.5283 50.8186 7.88792 58.2802 9.33625 68.1986C9.85417 74.2027 14.5842 86.3944 29.3883 87.0911H74.7267C78.9525 86.7565 79.8233 86.1423 83.0408 83.6719C87.3721 79.7852 94.6 72.6352 98.8029 67.9327C99.7104 66.9152 100.687 65.8702 100.815 64.5136C101.48 57.2856 90.5163 60.4161 82.5733 59.5544" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h3>Направления</h3>
           <span class="sub">хатха, виньяса, инь и&nbsp;другие</span>
         </button>
         <button class="nav-card c-teachers" data-open="teachers">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8.5" cy="8" r="2.6" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9.5" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c0-2.8 2.24-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13.7 14.3c2.4.2 4.3 2.2 4.3 4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg class="icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M37.8833 66.668C36.5917 69.5096 33.625 70.7763 30.9958 72.1513L15.8042 80.0971C9.70001 83.293 12.7458 91.668 19.2917 91.668C33.8417 91.668 45.35 84.6096 58.5 79.168C61.8125 77.7971 63.4167 78.0888 66.6667 79.5471" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M37.5 79.5471C40.75 78.0888 42.3542 77.7971 45.6667 79.168C58.8167 84.6096 70.325 91.668 84.875 91.668C91.4167 91.668 94.4667 83.293 88.3625 80.0971L73.1708 72.1513C70.5417 70.7763 67.5708 69.5096 66.2833 66.668" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M41.6667 16.6673C41.6667 18.8775 42.5447 20.9971 44.1075 22.5599C45.6703 24.1227 47.7899 25.0007 50 25.0007C52.2102 25.0007 54.3298 24.1227 55.8926 22.5599C57.4554 20.9971 58.3334 18.8775 58.3334 16.6673C58.3334 14.4572 57.4554 12.3376 55.8926 10.7748C54.3298 9.21196 52.2102 8.33398 50 8.33398C47.7899 8.33398 45.6703 9.21196 44.1075 10.7748C42.5447 12.3376 41.6667 14.4572 41.6667 16.6673Z" stroke="currentColor" stroke-width="2"/><path d="M50 33.334C43.3696 33.334 37.0107 35.9679 32.3223 40.6563C27.6339 45.3447 25 51.7036 25 58.334C31.6304 58.334 37.9893 55.7001 42.6777 51.0117C47.3661 46.3232 50 39.9644 50 33.334ZM50 33.334C56.6304 33.334 62.9893 35.9679 67.6777 40.6563C72.3661 45.3447 75 51.7036 75 58.334C68.3696 58.334 62.0107 55.7001 57.3223 51.0117C52.6339 46.3232 50 39.9644 50 33.334Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           <h3>Преподаватели</h3>
           <span class="sub">афиши классов и&nbsp;мероприятий</span>
         </button>
         <button class="nav-card c-schedule" data-open="schedule">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17" stroke="currentColor" stroke-width="1.6"/><path d="M8 3v3.4M16 3v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg class="icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.0833 49.1333V31.25C52.0833 30.6583 51.8833 30.1639 51.4833 29.7667C51.0833 29.3694 50.5875 29.1694 49.9958 29.1667C49.4042 29.1639 48.9097 29.3639 48.5125 29.7667C48.1153 30.1694 47.9167 30.6639 47.9167 31.25V49.4958C47.9167 49.9208 47.9944 50.3333 48.15 50.7333C48.3056 51.1306 48.5639 51.5111 48.925 51.875L63.7167 66.6667C64.1056 67.0556 64.5847 67.2639 65.1542 67.2917C65.7236 67.3194 66.2278 67.1111 66.6667 66.6667C67.1056 66.2222 67.3278 65.7306 67.3333 65.1917C67.3389 64.6528 67.1167 64.1611 66.6667 63.7167L52.0833 49.1333ZM50.0125 87.5C44.8292 87.5 39.9542 86.5167 35.3875 84.55C30.8236 82.5806 26.8528 79.9083 23.475 76.5333C20.0972 73.1583 17.4236 69.1917 15.4542 64.6333C13.4847 60.075 12.5 55.2014 12.5 50.0125C12.5 44.8236 13.4847 39.9486 15.4542 35.3875C17.4208 30.8236 20.0889 26.8528 23.4583 23.475C26.8278 20.0972 30.7958 17.4236 35.3625 15.4542C39.9292 13.4847 44.8042 12.5 49.9875 12.5C55.1708 12.5 60.0458 13.4847 64.6125 15.4542C69.1764 17.4208 73.1472 20.0903 76.525 23.4625C79.9028 26.8347 82.5764 30.8028 84.5458 35.3667C86.5153 39.9306 87.5 44.8042 87.5 49.9875C87.5 55.1708 86.5167 60.0458 84.55 64.6125C82.5833 69.1792 79.9111 73.15 76.5333 76.525C73.1556 79.9 69.1889 82.5736 64.6333 84.5458C60.0778 86.5181 55.2042 87.5028 50.0125 87.5ZM50 83.3333C59.2361 83.3333 67.1014 80.0875 73.5958 73.5958C80.0903 67.1042 83.3361 59.2389 83.3333 50C83.3306 40.7611 80.0847 32.8958 73.5958 26.4042C67.1069 19.9125 59.2417 16.6667 50 16.6667C40.7583 16.6667 32.8931 19.9139 26.4042 26.4083C19.9153 32.9028 16.6694 40.7667 16.6667 50C16.6639 59.2333 19.9111 67.0986 26.4083 73.5958C32.9056 80.0931 40.7694 83.3389 50 83.3333Z" fill="currentColor"/></svg>
           <h3>Расписание</h3>
           <span class="sub">на&nbsp;сегодня и&nbsp;неделю</span>
         </button>
