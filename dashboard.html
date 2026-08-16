@@ -79,22 +79,17 @@
     justify-content:center;
   }
   .header{
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:10px;
+    display:flex; align-items:center;
   }
-  .brand{ display:flex; align-items:center; gap:14px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
   .brand .mark{
-    width:clamp(42px,4.2vw,54px); height:clamp(42px,4.2vw,54px);
-    border-radius:50%; background:var(--orange);
-    display:flex; align-items:center; justify-content:center;
-    color:#fff; flex-shrink:0;
+    width:clamp(38px,3.8vw,48px); height:clamp(38px,3.8vw,48px);
+    color:var(--ink); flex-shrink:0;
   }
-  .brand .mark svg{ width:60%; height:60%; }
   .brand-text h1{ font-size:clamp(1.3rem,2vw,1.7rem); }
-  .location{ color:var(--muted); font-weight:600; font-size:clamp(.85rem,1.2vw,1rem); text-align:right; }
 
   .about-banner{
-    background:var(--orange); color:#fff;
+    background:var(--orange);
     border-radius:var(--r);
     padding: clamp(18px,2.4vw,28px) clamp(20px,2.8vw,32px);
     cursor:pointer; border:none; text-align:left;
@@ -102,11 +97,11 @@
     transition: transform .15s ease;
   }
   .about-banner:active{ transform:scale(0.985); }
-  .about-banner .eyebrow{
-    text-transform:uppercase; letter-spacing:.08em; font-size:clamp(.72rem,1vw,.85rem);
-    font-weight:700; opacity:.9;
+  .about-banner h3{ color:#fff; font-size:clamp(1.15rem,1.8vw,1.5rem); }
+  .about-banner .sub{
+    color:#fff; opacity:.85; font-weight:500;
+    font-size:clamp(.88rem,1.2vw,1.05rem); line-height:1.5; max-width:60ch;
   }
-  .about-banner p{ margin:0; font-size:clamp(1rem,1.5vw,1.28rem); line-height:1.45; font-weight:500; max-width:56ch; }
 
   .cards-row{
     display:grid; grid-template-columns:repeat(3,1fr);
@@ -143,8 +138,8 @@
   .prices-bar:active{ transform:scale(0.99); }
   .prices-bar h3{ color:var(--orange); font-size:clamp(1.05rem,1.6vw,1.3rem); }
   .prices-bar span.sub{ color:var(--muted); font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; display:block; margin-top:4px; }
-  .prices-bar .arrow{ color:var(--orange); flex-shrink:0; }
-  .prices-bar .arrow svg{ width:clamp(24px,2.4vw,30px); height:clamp(24px,2.4vw,30px); }
+  .prices-bar .price-arrow{ position:static; color:var(--orange); flex-shrink:0; }
+  .prices-bar .price-arrow svg{ width:clamp(24px,2.4vw,30px); height:clamp(24px,2.4vw,30px); display:block; }
 
   /* ---------- SUBVIEW COMMON ---------- */
   .sub-inner{ padding: clamp(18px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; }
@@ -315,25 +310,22 @@
     <div class="home-inner">
       <div class="header">
         <div class="brand">
-          <div class="mark">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="24" cy="24" r="9" stroke="currentColor" stroke-width="3"/>
-              <ellipse cx="24" cy="24" rx="19" ry="6.5" stroke="currentColor" stroke-width="3" transform="rotate(-18 24 24)"/>
-            </svg>
-          </div>
+          <svg class="mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="9" stroke="currentColor" stroke-width="3"/>
+            <ellipse cx="24" cy="24" rx="19" ry="6.5" stroke="currentColor" stroke-width="3" transform="rotate(-18 24 24)"/>
+          </svg>
           <div class="brand-text"><h1>Yoga Space</h1></div>
         </div>
-        <div class="location">Чернышевская · 100&nbsp;м от&nbsp;метро</div>
       </div>
 
       <button class="about-banner" data-open="about">
-        <span class="eyebrow">о студии</span>
-        <p>Тёплое пространство для&nbsp;практики в&nbsp;историческом центре — без&nbsp;спешки, без&nbsp;оценки, в&nbsp;своём темпе.</p>
+        <h3>О студии</h3>
+        <span class="sub">Тёплое пространство для&nbsp;практики в&nbsp;историческом центре — без&nbsp;спешки, без&nbsp;оценки, в&nbsp;своём темпе.</span>
       </button>
 
       <div class="cards-row">
         <button class="nav-card c-directions" data-open="directions">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3.5a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Z" fill="currentColor"/><path d="M9 21l1.6-6.2L8 13l1-4.2c.25-1 .9-1.6 1.9-1.6h2.2c1 0 1.65.6 1.9 1.6L16 13l-2.6 1.8L15 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M15.2 8.8l-2.1 4.3-4.3 2.1 2.1-4.3 4.3-2.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
           <h3>Направления</h3>
           <span class="sub">хатха, виньяса, инь и&nbsp;другие</span>
         </button>
@@ -354,7 +346,7 @@
           <h3>Цены</h3>
           <span class="sub">разовые занятия · абонементы · пробное занятие</span>
         </div>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="price-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </button>
     </div>
   </section>
