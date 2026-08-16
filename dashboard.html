@@ -16,30 +16,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Lora:ital@1&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FDF6F0;
-    --green:#5C6937;
+    --cream:#FAF6EF;
+    --sand:#F3EDE0;
+    --olive:#5C6937;
     --orange:#F0803B;
-    --coral:#F95D51;
-    --text:#242424;
-    --card-blue:#CFE6F5;
-    --card-blue-text:#1E4E73;
-    --card-sand:#DEDACB;
-    --card-sand-text:#4A4636;
-    --card-green:#5C6937;
+    --blue:#BBD9E8;
+    --ink:#2C3122;
+    --muted:#7E846E;
+    --line:rgba(92,105,55,.16);
+    --r:18px;
     --white:#FFFFFF;
-    --peach:#FBE3D2;
-    --radius-xl: 28px;
-    --radius-lg: 22px;
-    --radius-md: 16px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
   a{ text-decoration:none; color:inherit; }
   html,body{
     margin:0; padding:0; height:100%; width:100%;
-    background:var(--green);
+    background:var(--olive);
     overflow:hidden;
     font-family:'Montserrat', sans-serif;
-    color:var(--text);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
     -webkit-user-select:none; user-select:none;
   }
   #frame{
@@ -48,7 +44,7 @@
     padding: clamp(10px, 2vw, 28px);
   }
   #shell{
-    background:var(--bg);
+    background:var(--cream);
     width:100%; height:100%;
     max-width:1400px;
     border-radius: clamp(20px, 2.4vw, 36px);
@@ -58,7 +54,11 @@
     display:flex;
     flex-direction:column;
   }
-  h1,h2,h3{ font-family:'Unbounded', sans-serif; margin:0; font-weight:600; }
+  h1,h2,h3{ font-family:'Unbounded', sans-serif; margin:0; font-weight:500; letter-spacing:-.01em; color:var(--ink); }
+  .tagline{
+    font-family:'Lora', Georgia, serif; font-style:italic; color:var(--olive);
+    font-size:clamp(.95rem,1.3vw,1.15rem); line-height:1.3; margin:4px 0 0;
+  }
   .view{
     position:absolute; inset:0;
     display:flex; flex-direction:column;
@@ -90,12 +90,12 @@
     color:#fff; flex-shrink:0;
   }
   .brand .mark svg{ width:60%; height:60%; }
-  .brand-text h1{ font-size:clamp(1.3rem,2vw,1.7rem); color:var(--green); letter-spacing:.01em; }
-  .location{ color:var(--green); opacity:.75; font-weight:600; font-size:clamp(.85rem,1.2vw,1rem); text-align:right; }
+  .brand-text h1{ font-size:clamp(1.3rem,2vw,1.7rem); }
+  .location{ color:var(--muted); font-weight:600; font-size:clamp(.85rem,1.2vw,1rem); text-align:right; }
 
   .about-banner{
     background:var(--orange); color:#fff;
-    border-radius:var(--radius-xl);
+    border-radius:var(--r);
     padding: clamp(18px,2.4vw,28px) clamp(20px,2.8vw,32px);
     cursor:pointer; border:none; text-align:left;
     display:flex; flex-direction:column; gap:8px;
@@ -114,7 +114,7 @@
     flex: none;
   }
   .nav-card{
-    border:none; border-radius:var(--radius-lg);
+    border:none; border-radius:var(--r);
     padding: clamp(16px,2vw,24px);
     height: clamp(160px, 26vh, 260px);
     display:flex; flex-direction:column; justify-content:flex-end; gap:10px;
@@ -124,13 +124,17 @@
   .nav-card:active{ transform:scale(0.98); }
   .nav-card .icon{ width:clamp(30px,3vw,38px); height:clamp(30px,3vw,38px); }
   .nav-card h3{ font-size:clamp(1.05rem,1.6vw,1.35rem); }
-  .nav-card span.sub{ font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; opacity:.85; }
-  .nav-card.c-directions{ background:var(--card-blue); color:var(--card-blue-text); }
-  .nav-card.c-teachers{ background:var(--card-sand); color:var(--card-sand-text); }
-  .nav-card.c-schedule{ background:var(--card-green); color:#fff; }
+  .nav-card span.sub{ font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; color:var(--muted); }
+  .nav-card.c-directions{ background:var(--blue); color:var(--ink); }
+  .nav-card.c-directions span.sub{ color:#41482F; opacity:.75; }
+  .nav-card.c-teachers{ background:var(--sand); color:var(--ink); }
+  .nav-card.c-teachers span.sub{ color:var(--muted); }
+  .nav-card.c-schedule{ background:var(--olive); color:#fff; }
+  .nav-card.c-schedule span.sub{ color:#fff; opacity:.8; }
+  .nav-card.c-schedule h3{ color:#fff; }
 
   .prices-bar{
-    background:var(--peach); border-radius:var(--radius-lg);
+    background:var(--sand); border-radius:var(--r);
     border:none; cursor:pointer;
     padding: clamp(16px,2vw,22px) clamp(20px,2.4vw,28px);
     display:flex; align-items:center; justify-content:space-between; gap:14px;
@@ -138,48 +142,51 @@
   }
   .prices-bar:active{ transform:scale(0.99); }
   .prices-bar h3{ color:var(--orange); font-size:clamp(1.05rem,1.6vw,1.3rem); }
-  .prices-bar span.sub{ color:#a2582b; font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; display:block; margin-top:4px; }
+  .prices-bar span.sub{ color:var(--muted); font-size:clamp(.82rem,1.1vw,.95rem); font-weight:500; display:block; margin-top:4px; }
   .prices-bar .arrow{ color:var(--orange); flex-shrink:0; }
   .prices-bar .arrow svg{ width:clamp(24px,2.4vw,30px); height:clamp(24px,2.4vw,30px); }
 
   /* ---------- SUBVIEW COMMON ---------- */
   .sub-inner{ padding: clamp(18px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; }
-  .topbar{ display:flex; align-items:center; gap:14px; }
+  .topbar{ display:flex; align-items:flex-start; gap:14px; }
   .back-btn{
     display:flex; align-items:center; gap:8px;
-    background:#fff; border:none; border-radius:999px;
-    padding: 10px 18px 10px 14px; cursor:pointer; color:var(--green);
+    background:#fff; border:1px solid var(--line); border-radius:999px;
+    padding: 10px 18px 10px 14px; cursor:pointer; color:var(--olive);
     font-family:'Montserrat',sans-serif; font-weight:600; font-size:.95rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     flex-shrink:0;
   }
   .back-btn svg{ width:18px; height:18px; }
-  .sub-title{ color:var(--green); font-size:clamp(1.3rem,2.2vw,1.8rem); }
+  .sub-title-wrap{ display:flex; flex-direction:column; }
+  .sub-title{ font-size:clamp(1.3rem,2.2vw,1.8rem); }
 
   /* ---------- ABOUT ---------- */
   .about-photos{
     display:grid; grid-template-columns:1.3fr 1fr; grid-template-rows:1fr 1fr;
-    gap:14px; border-radius:var(--radius-lg); overflow:hidden;
+    gap:14px; border-radius:var(--r); overflow:hidden;
     max-height: 42vh;
   }
   .about-photos img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .about-photos .p1{ grid-row:1/3; border-radius:var(--radius-md); }
-  .about-photos .p2, .about-photos .p3{ border-radius:var(--radius-md); }
+  .about-photos .p1{ grid-row:1/3; border-radius:var(--r); }
+  .about-photos .p2, .about-photos .p3{ border-radius:var(--r); }
   .about-photos .p1, .about-photos .p2, .about-photos .p3{ overflow:hidden; }
 
   .about-text{
     display:flex; flex-direction:column; gap:16px; max-width:900px;
   }
   .about-text p{
-    margin:0; font-size:clamp(.95rem,1.3vw,1.12rem); line-height:1.6; color:var(--text);
+    margin:0; font-size:clamp(.95rem,1.3vw,1.12rem); line-height:1.6; color:var(--ink);
   }
-  .about-text p.lead{ font-family:'Unbounded',sans-serif; font-weight:500; font-size:clamp(1.05rem,1.5vw,1.3rem); color:var(--green); line-height:1.5; }
+  .about-text p.lead{
+    font-family:'Lora',Georgia,serif; font-style:italic; font-weight:400;
+    font-size:clamp(1.1rem,1.6vw,1.35rem); color:var(--olive); line-height:1.5;
+  }
   .about-facts{
-    background:#fff; border-radius:var(--radius-md); padding:18px 22px;
-    font-size:clamp(.85rem,1.1vw,1rem); line-height:1.7; color:#4a4636;
+    background:#fff; border:1px solid var(--line); border-radius:var(--r); padding:18px 22px;
+    font-size:clamp(.85rem,1.1vw,1rem); line-height:1.7; color:var(--ink);
   }
   .about-contact{
-    color:var(--green); opacity:.7; font-size:.85rem; font-weight:600;
+    color:var(--muted); font-size:.85rem; font-weight:600;
   }
 
   /* ---------- DIRECTIONS ---------- */
@@ -188,19 +195,20 @@
     gap: clamp(12px,1.6vw,18px);
   }
   .dir-card{
-    background:#fff; border-radius:var(--radius-lg);
+    background:#fff; border:1px solid var(--line); border-radius:var(--r);
     padding: clamp(16px,2vw,22px);
     display:flex; flex-direction:column; gap:10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    transition:border-color .18s, box-shadow .18s;
   }
+  .dir-card:hover{ border-color:rgba(92,105,55,.35); box-shadow:0 6px 22px rgba(44,49,34,.06); }
   .dir-card .icon{
     width:44px; height:44px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    background:var(--peach); color:var(--orange); flex-shrink:0;
+    background:var(--sand); color:var(--orange); flex-shrink:0;
   }
   .dir-card .icon svg{ width:24px; height:24px; }
-  .dir-card h3{ color:var(--green); font-size:clamp(1rem,1.4vw,1.15rem); }
-  .dir-card p{ margin:0; font-size:clamp(.82rem,1.1vw,.95rem); line-height:1.55; color:#5a5a5a; }
+  .dir-card h3{ font-size:clamp(1rem,1.4vw,1.15rem); }
+  .dir-card p{ margin:0; font-size:clamp(.82rem,1.1vw,.95rem); line-height:1.55; color:var(--muted); }
 
   /* ---------- TEACHERS ---------- */
   .gallery-wrap{
@@ -213,12 +221,12 @@
     padding-bottom:4px;
   }
   .poster-card{
-    aspect-ratio:3/4; border-radius:var(--radius-md); overflow:hidden;
-    background:var(--card-sand); border:none; padding:0; cursor:pointer;
-    display:block; width:100%; transition: transform .15s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    aspect-ratio:3/4; border-radius:var(--r); overflow:hidden;
+    background:var(--sand); border:1px solid var(--line); padding:0; cursor:pointer;
+    display:block; width:100%; transition: transform .15s ease, box-shadow .18s;
   }
   .poster-card:active{ transform:scale(0.97); }
+  .poster-card:hover{ box-shadow:0 6px 22px rgba(44,49,34,.1); }
   .poster-card img{ width:100%; height:100%; object-fit:cover; display:block; }
 
   .gallery-placeholder{
@@ -229,22 +237,21 @@
     max-width:560px; text-align:center; display:flex; flex-direction:column; gap:14px; align-items:center;
   }
   .gallery-placeholder .box .icon{
-    width:56px; height:56px; border-radius:50%; background:var(--card-sand);
-    display:flex; align-items:center; justify-content:center; color:var(--card-sand-text);
+    width:56px; height:56px; border-radius:50%; background:var(--sand);
+    display:flex; align-items:center; justify-content:center; color:var(--olive);
   }
   .gallery-placeholder .box .icon svg{ width:28px; height:28px; }
-  .gallery-placeholder h3{ color:var(--green); font-size:1.15rem; }
-  .gallery-placeholder p{ margin:0; font-size:.9rem; line-height:1.6; color:#6a6a6a; }
+  .gallery-placeholder h3{ font-size:1.15rem; }
+  .gallery-placeholder p{ margin:0; font-size:.9rem; line-height:1.6; color:var(--muted); }
   .gallery-placeholder code{
-    background:var(--bg); padding:2px 8px; border-radius:6px; font-size:.85rem;
+    background:var(--sand); padding:2px 8px; border-radius:6px; font-size:.85rem;
   }
 
   .help-btn{
-    width:34px; height:34px; border-radius:50%; border:none;
-    background:#fff; color:var(--green);
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+    background:#fff; color:var(--olive);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
     font-family:'Unbounded',sans-serif; font-weight:600; font-size:.9rem;
-    box-shadow:0 2px 8px rgba(0,0,0,0.06);
     flex-shrink:0; margin-left:auto;
   }
 
@@ -257,7 +264,7 @@
   }
   .lightbox.show{ opacity:1; pointer-events:auto; }
   .lightbox img{
-    max-width:100%; max-height:100%; border-radius:14px; display:block;
+    max-width:100%; max-height:100%; border-radius:var(--r); display:block;
     box-shadow:0 20px 60px rgba(0,0,0,.5);
   }
   .lightbox-close{
@@ -274,21 +281,21 @@
   .lightbox-nav.next{ right:16px; }
 
   .help-overlay{
-    position:absolute; inset:0; background:rgba(36,36,36,0.55);
+    position:absolute; inset:0; background:rgba(28,30,20,0.55);
     display:flex; align-items:center; justify-content:center;
     opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:10;
     padding:20px;
   }
   .help-overlay.show{ opacity:1; pointer-events:auto; }
   .help-card{
-    background:#fff; border-radius:var(--radius-lg); padding:26px 28px; max-width:520px;
+    background:#fff; border-radius:var(--r); padding:26px 28px; max-width:520px;
     max-height:80%; overflow-y:auto;
   }
-  .help-card h3{ color:var(--green); margin-bottom:12px; font-size:1.15rem; }
-  .help-card ol{ margin:0 0 16px; padding-left:20px; font-size:.9rem; line-height:1.7; color:#3a3a3a; }
-  .help-card p{ font-size:.85rem; color:#6a6a6a; line-height:1.6; margin:0 0 14px;}
+  .help-card h3{ margin-bottom:12px; font-size:1.15rem; }
+  .help-card ol{ margin:0 0 16px; padding-left:20px; font-size:.9rem; line-height:1.7; color:var(--ink); }
+  .help-card p{ font-size:.85rem; color:var(--muted); line-height:1.6; margin:0 0 14px;}
   .help-close{
-    background:var(--green); color:#fff; border:none; border-radius:999px;
+    background:var(--olive); color:#fff; border:none; border-radius:999px;
     padding:10px 22px; font-family:'Montserrat',sans-serif; font-weight:600; cursor:pointer;
   }
 
@@ -357,7 +364,10 @@
     <div class="sub-inner">
       <div class="topbar">
         <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
-        <h2 class="sub-title">О студии</h2>
+        <div class="sub-title-wrap">
+          <h2 class="sub-title">О студии</h2>
+          <p class="tagline">тёплое пространство для&nbsp;практики</p>
+        </div>
       </div>
 
       <div class="about-photos">
@@ -382,7 +392,10 @@
     <div class="sub-inner">
       <div class="topbar">
         <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
-        <h2 class="sub-title">Направления</h2>
+        <div class="sub-title-wrap">
+          <h2 class="sub-title">Направления</h2>
+          <p class="tagline">выбери свой формат практики</p>
+        </div>
       </div>
 
       <div class="dir-grid">
@@ -425,7 +438,10 @@
     <div class="sub-inner" style="flex:1; min-height:0;">
       <div class="topbar">
         <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
-        <h2 class="sub-title">Преподаватели и&nbsp;мероприятия</h2>
+        <div class="sub-title-wrap">
+          <h2 class="sub-title">Преподаватели и&nbsp;мероприятия</h2>
+          <p class="tagline">афиши классов и&nbsp;специальных событий</p>
+        </div>
         <button class="help-btn" id="help-open-btn">?</button>
       </div>
 
@@ -463,7 +479,10 @@
     <div class="sub-inner" style="gap:0;">
       <div class="topbar" style="margin-bottom:14px;">
         <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
-        <h2 class="sub-title">Расписание</h2>
+        <div class="sub-title-wrap">
+          <h2 class="sub-title">Расписание</h2>
+          <p class="tagline">выбери свой класс на&nbsp;Чернышевской</p>
+        </div>
       </div>
 
       <!-- ==== живой виджет расписания Reservi, тот же, что на yogaspace.ru/timetablespb ====
