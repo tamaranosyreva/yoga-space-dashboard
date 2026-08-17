@@ -87,7 +87,7 @@
     background:var(--orange);
     border-radius:var(--r);
     padding: clamp(18px,2.4vw,28px) clamp(20px,2.8vw,32px);
-    cursor:pointer; border:none; text-align:left;
+    cursor:pointer; border:none; text-align:left; position:relative;
     display:flex; flex-direction:column; gap:8px;
     transition: transform .15s ease;
   }
@@ -150,8 +150,8 @@
   .about-grid{
     display:grid;
     grid-template-columns: 1.6fr 1fr 1fr;
-    grid-template-rows: minmax(0,42vh) auto;
-    gap:14px;
+    grid-template-rows: minmax(0,36vh) auto;
+    gap: clamp(14px,1.8vw,22px);
     flex:1; min-height:0;
   }
   .about-photo-main{
@@ -170,48 +170,54 @@
     border-radius:var(--r);
   }
 
-  .about-text{
-    grid-column:1; grid-row:2;
-    display:flex; flex-direction:column; gap:16px;
+  /* колонка 1 — заголовок + миссия на оливковой плашке */
+  .about-col1{ grid-column:1; grid-row:2; display:flex; flex-direction:column; gap:18px; min-height:0; }
+  .about-col1 > h2{ color:var(--olive); font-size:clamp(1.7rem,2.8vw,2.3rem); }
+  .about-mission{
+    background:var(--olive); color:#fff; border-radius:var(--r);
+    padding: clamp(20px,2.4vw,28px); display:flex; flex-direction:column; gap:16px;
+    flex:1; min-height:0;
   }
-  .about-text p{
-    margin:0; font-size:clamp(.9rem,1.2vw,1.05rem); line-height:1.6; color:var(--ink);
+  .about-mission h3{
+    color:#fff; text-transform:uppercase; font-size:clamp(1.4rem,2.2vw,1.9rem); line-height:1.15;
   }
-  .about-text p.lead{
-    font-family:'Lora',Georgia,serif; font-style:italic; font-weight:400;
-    font-size:clamp(1.05rem,1.5vw,1.25rem); color:var(--olive); line-height:1.5;
+  .about-mission hr{ border:none; border-top:1px solid rgba(255,255,255,.35); width:100%; margin:0; }
+  .about-mission p{ margin:0; font-size:clamp(1rem,1.3vw,1.2rem); line-height:1.55; color:rgba(255,255,255,.92); }
+  .about-mission p b{ color:#fff; font-weight:700; }
+
+  /* колонка 2 — локация + залы + удобства */
+  .about-col2{ grid-column:2; grid-row:2; display:flex; flex-direction:column; gap:22px; overflow-y:auto; min-height:0; }
+  .about-loc h3{
+    font-size:clamp(1rem,1.3vw,1.15rem); text-transform:uppercase; letter-spacing:.02em; margin-bottom:8px;
   }
-  .about-halls{
-    background:#fff; border:1px solid var(--line); border-radius:var(--r); padding:20px 22px;
-  }
-  .about-halls h3{ font-size:1.35rem; margin-bottom:2px; }
-  .about-halls-sub{ margin:0 0 14px; font-size:.9rem; color:var(--muted); }
+  .about-loc p{ margin:0; font-size:clamp(.88rem,1.15vw,1rem); line-height:1.5; color:var(--muted); }
+  .about-halls h3{ font-size:clamp(1.25rem,1.7vw,1.5rem); margin-bottom:2px; }
+  .about-halls-sub{ margin:0 0 14px; font-size:clamp(.88rem,1.15vw,1rem); color:var(--muted); }
   .about-halls-label{
-    margin:0 0 10px; font-size:.78rem; font-weight:700; letter-spacing:.04em;
+    margin:0 0 10px; font-size:.8rem; font-weight:700; letter-spacing:.03em;
     text-transform:uppercase; color:var(--ink);
   }
   .about-pills{ display:flex; flex-wrap:wrap; gap:8px; }
   .about-pill{
     border:1px solid var(--line); border-radius:999px; padding:7px 14px;
-    font-size:.82rem; font-weight:500; color:var(--ink); background:var(--cream);
-  }
-  .about-contact{
-    color:var(--muted); font-size:.85rem; font-weight:600;
+    font-size:.85rem; font-weight:500; color:var(--ink); background:var(--cream);
   }
 
-  .about-qr{
-    grid-column:2/4; grid-row:2;
-    background:#fff; border:1px solid var(--line); border-radius:var(--r);
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
-    padding:20px;
+  /* колонка 3 — QR и контакты */
+  .about-col3{
+    grid-column:3; grid-row:2;
+    display:flex; flex-direction:column; align-items:center; gap:12px; padding-top:4px;
   }
   .about-qr-code{
-    width:clamp(110px,12vw,150px); height:clamp(110px,12vw,150px);
+    width:clamp(120px,13vw,170px); height:clamp(120px,13vw,170px);
     background:var(--sand); border-radius:12px;
     display:flex; align-items:center; justify-content:center;
   }
   .about-qr-code img{ width:100%; height:100%; object-fit:contain; display:block; border-radius:12px; }
-  .about-qr-label{ margin:0; font-size:.85rem; font-weight:600; color:var(--olive); text-align:center; }
+  .about-qr-label{ margin:0; font-size:clamp(.9rem,1.2vw,1.05rem); font-weight:700; color:var(--olive); text-align:center; }
+  .about-contact{
+    margin-top:auto; color:var(--muted); font-size:.78rem; font-weight:600; text-align:center;
+  }
 
   /* ---------- DIRECTIONS ---------- */
   .dir-grid{
@@ -329,7 +335,6 @@
 
   @media (max-width: 760px){
     .dir-grid{ grid-template-columns:1fr 1fr; }
-    .about-photos{ grid-template-columns:1fr 1fr; max-height:34vh; }
   }
 
   /* Портретная ориентация (или узкий экран) — 4 карточки в один ряд становятся
@@ -355,6 +360,7 @@
       <button class="about-banner" data-open="about">
         <h3>О студии</h3>
         <span class="sub">Тёплое пространство для&nbsp;практики в&nbsp;историческом центре, в&nbsp;окружении стильных заведений и&nbsp;культурных локаций</span>
+        <span class="photo-card-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </button>
 
       <div class="photo-grid">
@@ -410,9 +416,20 @@
         <img class="about-photo-side1" src="assets/about-side1.jpg" alt="Коврик Yoga Space">
         <img class="about-photo-side2" src="assets/about-side2.jpg" alt="Уютный уголок студии">
 
-        <div class="about-text">
-          <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни</p>
-          <p>Йога для&nbsp;нас — это не&nbsp;только физические и&nbsp;дыхательные упражнения на&nbsp;коврике, но&nbsp;и&nbsp;то, каким человеком ты&nbsp;становишься за&nbsp;его пределами. Мы&nbsp;верим в&nbsp;работу над&nbsp;собой и&nbsp;в&nbsp;активное участие в&nbsp;жизни общества.</p>
+        <div class="about-col1">
+          <h2>О&nbsp;Yoga Space</h2>
+          <div class="about-mission">
+            <h3>Йога<br>для&nbsp;нас</h3>
+            <hr>
+            <p>Не&nbsp;только физические или&nbsp;дыхательные упражнения, выполняемые на&nbsp;коврике, но&nbsp;и&nbsp;<b>то, каким человеком ты&nbsp;становишься за&nbsp;его пределами</b>.</p>
+          </div>
+        </div>
+
+        <div class="about-col2">
+          <div class="about-loc">
+            <h3>Удобная локация</h3>
+            <p>Студия расположена в&nbsp;историческом здании в&nbsp;окружении стильных заведений и&nbsp;культурных локаций</p>
+          </div>
 
           <div class="about-halls">
             <h3>3&nbsp;зала</h3>
@@ -432,14 +449,15 @@
               <span class="about-pill">Травяной чай</span>
             </div>
           </div>
-
-          <div class="about-contact">пр. Чернышевского, 18, этаж&nbsp;2 · +7&nbsp;(932)&nbsp;266-18-18 · @yogaspacespb</div>
         </div>
 
-        <a class="about-qr" href="https://t.me/yogaspace_moscow" target="_blank" rel="noopener">
-          <div class="about-qr-code"><img src="assets/telegram-qr.png" alt="QR-код Telegram-канала Yoga Space"></div>
-          <p class="about-qr-label">Наш Telegram-канал</p>
-        </a>
+        <div class="about-col3">
+          <a class="about-qr" href="https://t.me/yogaspace_moscow" target="_blank" rel="noopener">
+            <div class="about-qr-code"><img src="assets/telegram-qr.png" alt="QR-код Telegram-канала Yoga Space"></div>
+            <p class="about-qr-label">Наш Telegram-канал</p>
+          </a>
+          <div class="about-contact">пр. Чернышевского, 18, этаж&nbsp;2 · +7&nbsp;(932)&nbsp;266-18-18</div>
+        </div>
       </div>
     </div>
   </section>
