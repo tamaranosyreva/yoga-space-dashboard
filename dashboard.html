@@ -121,15 +121,15 @@
     text-shadow: 0 2px 10px rgba(0,0,0,.18);
   }
   .photo-card-overlay .pill{
-    display:inline-flex; align-items:center; max-width:100%; box-sizing:border-box;
+    display:inline-flex; align-items:center; justify-content:center; max-width:100%; box-sizing:border-box;
     border:1.5px solid rgba(255,255,255,.9); border-radius:999px;
-    padding: 12px 18px;
+    padding: 8px 18px;
     font-family:'Montserrat',sans-serif; font-size:.85rem; font-weight:500; color:#fff;
-    line-height:1.25; white-space:normal;
+    line-height:1.25; white-space:normal; text-align:left;
   }
 
   /* ---------- SUBVIEW COMMON ---------- */
-  .sub-inner{ padding: clamp(18px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; }
+  .sub-inner{ padding: clamp(24px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; box-sizing:border-box; }
   .topbar{ display:flex; align-items:flex-start; gap:14px; }
   .back-btn{
     display:flex; align-items:center; gap:8px;
@@ -180,17 +180,46 @@
     background:#fff; border:1px solid var(--line); border-radius:var(--r);
     padding: clamp(16px,2vw,22px);
     display:flex; flex-direction:column; gap:10px;
-    transition:border-color .18s, box-shadow .18s;
+    text-align:left; cursor:pointer; width:100%;
+    transition:border-color .18s, box-shadow .18s, transform .15s ease;
   }
   .dir-card:hover{ border-color:rgba(92,105,55,.35); box-shadow:0 6px 22px rgba(44,49,34,.06); }
+  .dir-card:active{ transform:scale(0.98); }
   .dir-card .icon{
     width:44px; height:44px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     background:var(--sand); color:var(--orange); flex-shrink:0;
   }
-  .dir-card .icon svg{ width:24px; height:24px; }
+  .dir-card .icon img{ width:26px; height:26px; object-fit:contain; display:block; }
   .dir-card h3{ font-size:clamp(1rem,1.4vw,1.15rem); }
   .dir-card p{ margin:0; font-size:clamp(.82rem,1.1vw,.95rem); line-height:1.55; color:var(--muted); }
+
+  /* ---------- DIRECTIONS: popup with full description ---------- */
+  .dir-modal-overlay{
+    position:absolute; inset:0; background:rgba(28,30,20,0.6);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:20;
+    padding:24px;
+  }
+  .dir-modal-overlay.show{ opacity:1; pointer-events:auto; }
+  .dir-modal{
+    position:relative; background:var(--olive); color:#fff;
+    border-radius:24px; padding:36px 36px 32px; max-width:560px; width:100%;
+    max-height:82%; overflow-y:auto; box-shadow:0 30px 70px rgba(0,0,0,.35);
+  }
+  .dir-modal h3{ color:#fff; font-size:1.5rem; text-align:center; margin-bottom:18px; }
+  .dir-modal p{ margin:0 0 24px; font-size:.98rem; line-height:1.65; color:rgba(255,255,255,.92); }
+  .dir-modal-close{
+    position:absolute; top:16px; right:16px; width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,.16); color:#fff; border:none; font-size:1.05rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dir-modal-btn{
+    display:flex; align-items:center; justify-content:center; width:100%;
+    background:var(--cream); color:var(--ink); border:none; border-radius:999px;
+    padding:15px 24px; font-family:'Montserrat',sans-serif; font-weight:600; font-size:.95rem;
+    cursor:pointer;
+  }
 
   /* ---------- TEACHERS ---------- */
   .gallery-wrap{
@@ -229,14 +258,6 @@
     background:var(--sand); padding:2px 8px; border-radius:6px; font-size:.85rem;
   }
 
-  .help-btn{
-    width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
-    background:#fff; color:var(--olive);
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    font-family:'Unbounded',sans-serif; font-weight:600; font-size:.9rem;
-    flex-shrink:0; margin-left:auto;
-  }
-
   /* ---------- LIGHTBOX (просмотр афиши целиком) ---------- */
   .lightbox{
     position:absolute; inset:0; background:rgba(28,30,20,0.9);
@@ -250,9 +271,10 @@
     box-shadow:0 20px 60px rgba(0,0,0,.5);
   }
   .lightbox-close{
-    position:absolute; top:18px; right:18px; width:42px; height:42px; border-radius:50%;
-    background:rgba(255,255,255,.16); color:#fff; border:none; font-size:1.2rem; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
+    position:absolute; top:18px; right:18px; width:44px; height:44px; border-radius:50%;
+    background:#fff; color:var(--ink); border:none; font-size:1.2rem; cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.3);
+    display:flex; align-items:center; justify-content:center; z-index:2;
   }
   .lightbox-nav{
     position:absolute; top:50%; transform:translateY(-50%);
@@ -262,28 +284,15 @@
   .lightbox-nav.prev{ left:16px; }
   .lightbox-nav.next{ right:16px; }
 
-  .help-overlay{
-    position:absolute; inset:0; background:rgba(28,30,20,0.55);
-    display:flex; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:10;
-    padding:20px;
-  }
-  .help-overlay.show{ opacity:1; pointer-events:auto; }
-  .help-card{
-    background:#fff; border-radius:var(--r); padding:26px 28px; max-width:520px;
-    max-height:80%; overflow-y:auto;
-  }
-  .help-card h3{ margin-bottom:12px; font-size:1.15rem; }
-  .help-card ol{ margin:0 0 16px; padding-left:20px; font-size:.9rem; line-height:1.7; color:var(--ink); }
-  .help-card p{ font-size:.85rem; color:var(--muted); line-height:1.6; margin:0 0 14px;}
-  .help-close{
-    background:var(--olive); color:#fff; border:none; border-radius:999px;
-    padding:10px 22px; font-family:'Montserrat',sans-serif; font-weight:600; cursor:pointer;
-  }
-
   @media (max-width: 760px){
     .dir-grid{ grid-template-columns:1fr 1fr; }
     .about-photos{ grid-template-columns:1fr 1fr; max-height:34vh; }
+  }
+
+  /* Портретная ориентация (или узкий экран) — 4 карточки в один ряд становятся
+     слишком узкими и обрезают текст, поэтому переключаемся на сетку 2×2. */
+  @media (max-aspect-ratio: 11/10){
+    .photo-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(2,minmax(0,1fr)); }
   }
 </style>
 </head>
@@ -302,7 +311,7 @@
 
       <button class="about-banner" data-open="about">
         <h3>О студии</h3>
-        <span class="sub">Тёплое пространство для&nbsp;практики в&nbsp;историческом центре, в&nbsp;окружении стильных заведений и&nbsp;культурных локаций.</span>
+        <span class="sub">Тёплое пространство для&nbsp;практики в&nbsp;историческом центре, в&nbsp;окружении стильных заведений и&nbsp;культурных локаций</span>
       </button>
 
       <div class="photo-grid">
@@ -356,7 +365,7 @@
       </div>
 
       <div class="about-text">
-        <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни.</p>
+        <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни</p>
         <p>Йога для&nbsp;нас — это не&nbsp;только физические и&nbsp;дыхательные упражнения на&nbsp;коврике, но&nbsp;и&nbsp;то, каким человеком ты&nbsp;становишься за&nbsp;его пределами. Мы&nbsp;верим в&nbsp;работу над&nbsp;собой и&nbsp;в&nbsp;активное участие в&nbsp;жизни общества.</p>
         <div class="about-facts">
           Студия — в&nbsp;историческом здании, в&nbsp;100&nbsp;м от&nbsp;метро Чернышевская. 3&nbsp;зала — на&nbsp;2, 17&nbsp;и&nbsp;25&nbsp;человек. Есть всё необходимое: коврики, блоки, пледы, душ, полотенца, фен и&nbsp;травяной чай.
@@ -378,36 +387,45 @@
       </div>
 
       <div class="dir-grid">
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v6M12 12.5l-4 6M12 12.5l4 6M8 9l4 1 4-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <button class="dir-card" data-dir="hatha">
+          <div class="icon"><img src="assets/dir-hatha.png" alt=""></div>
           <h3>Хатха-йога</h3>
-          <p>Статичные асаны в&nbsp;спокойном темпе — акцент на&nbsp;дыхании и&nbsp;точности позы.</p>
-        </div>
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v4l-5 3M12 10.5l5 3M9 18l3-4.5 3 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p>Статичные асаны в&nbsp;спокойном темпе — акцент на&nbsp;дыхании и&nbsp;точности позы</p>
+        </button>
+        <button class="dir-card" data-dir="vinyasa">
+          <div class="icon"><img src="assets/dir-vinyasa.png" alt=""></div>
           <h3>Виньяса-флоу</h3>
-          <p>Плавная связка асан в&nbsp;динамике, синхронизированная с&nbsp;дыханием.</p>
-        </div>
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v5M8 9.5l4 2 4-2M8 20l4-8.5 4 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p>Плавная связка асан в&nbsp;динамике, синхронизированная с&nbsp;дыханием</p>
+        </button>
+        <button class="dir-card" data-dir="ashtanga">
+          <div class="icon"><img src="assets/dir-ashtanga.png" alt=""></div>
           <h3>Аштанга</h3>
-          <p>Традиционная силовая практика по&nbsp;фиксированной последовательности.</p>
-        </div>
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v4.5M12 11l-5 2.5v4M12 11l5 2.5v4M9.5 20h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <p>Традиционная силовая практика по&nbsp;фиксированной последовательности</p>
+        </button>
+        <button class="dir-card" data-dir="jivamukti">
+          <div class="icon"><img src="assets/dir-jivamukti.png" alt=""></div>
           <h3>Дживамукти</h3>
-          <p>Философское направление с&nbsp;музыкой, мантрами и&nbsp;медитацией.</p>
-        </div>
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12c1.5-3 3-4.5 5-4.5S12 9 12 12s1.5 4.5 3.5 4.5S19 15 20 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4 8.3c1.5-2.2 3-3.3 5-3.3S12 6 12 8.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".55"/><path d="M12 15.7c0 2.3 1.5 3.3 3.5 3.3S19 17.9 20 15.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg></div>
+          <p>Философское направление с&nbsp;музыкой, мантрами и&nbsp;медитацией</p>
+        </button>
+        <button class="dir-card" data-dir="sound">
+          <div class="icon"><img src="assets/dir-sound.png" alt=""></div>
           <h3>Звукотерапия</h3>
-          <p>Глубокое расслабление под&nbsp;звучание поющих чаш и&nbsp;других инструментов.</p>
-        </div>
-        <div class="dir-card">
-          <div class="icon"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4.5" r="2" fill="currentColor"/><path d="M12 6.5v3.5M7 12.5c0 3 2.2 5.5 5 5.5s5-2.5 5-5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 10c-2.8 0-5 1.1-5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <p>Глубокое расслабление под&nbsp;звучание поющих чаш и&nbsp;других инструментов</p>
+        </button>
+        <button class="dir-card" data-dir="yin">
+          <div class="icon"><img src="assets/dir-yin.png" alt=""></div>
           <h3>Инь-йога</h3>
-          <p>Медленная практика с&nbsp;долгим удержанием поз для&nbsp;мягкой растяжки.</p>
-        </div>
+          <p>Медленная практика с&nbsp;долгим удержанием поз для&nbsp;мягкой растяжки</p>
+        </button>
+      </div>
+    </div>
+
+    <div class="dir-modal-overlay" id="dir-modal-overlay">
+      <div class="dir-modal">
+        <button class="dir-modal-close" id="dir-modal-close">✕</button>
+        <h3 id="dir-modal-title"></h3>
+        <p id="dir-modal-text"></p>
+        <button class="dir-modal-btn" id="dir-modal-schedule-btn">Смотреть расписание</button>
       </div>
     </div>
   </section>
@@ -421,7 +439,6 @@
           <h2 class="sub-title">Преподаватели и&nbsp;мероприятия</h2>
           <p class="tagline">афиши классов и&nbsp;специальных событий</p>
         </div>
-        <button class="help-btn" id="help-open-btn">?</button>
       </div>
 
       <div class="gallery-wrap" id="gallery-wrap">
@@ -429,21 +446,16 @@
       </div>
     </div>
 
-    <div class="help-overlay" id="help-overlay">
-      <div class="help-card">
-        <h3>Как добавить или&nbsp;убрать афишу</h3>
-        <p>Галерея — это общая папка на&nbsp;Яндекс.Диске. Ничего программировать не&nbsp;нужно.</p>
-        <ol>
-          <li>Откройте папку на&nbsp;Яндекс.Диске (ссылка сохранена в&nbsp;заметках/у администратора).</li>
-          <li>Чтобы добавить афишу — просто загрузите фото в&nbsp;эту папку с&nbsp;телефона или&nbsp;компьютера.</li>
-          <li>Чтобы убрать — удалите файл из&nbsp;папки.</li>
-          <li>Планшет подтянет изменения при&nbsp;следующем открытии раздела «Преподаватели».</li>
-        </ol>
-        <p><strong>Порядок афиш.</strong> Чтобы у&nbsp;мероприятия была своя дата — начните имя файла с&nbsp;даты: <code>20.08.2026_Название.jpg</code>. Ближайшие даты покажутся первыми, файлы без&nbsp;даты (регулярные классы) — после них, а прошедшие даты уедут в&nbsp;конец. Само имя файла на&nbsp;экране не&nbsp;видно — оно нужно только для сортировки.</p>
-        <p>Настройка «под ключ» (один раз): создать папку на&nbsp;Яндекс.Диске → правая кнопка мыши → «Поделиться» → «Скопировать ссылку» → вставить эту ссылку в&nbsp;файл <code>dashboard.html</code> в&nbsp;строку <code>YANDEX_PUBLIC_KEY</code>. Афиши — вертикальные фото (jpg/png), лучше не&nbsp;класть в&nbsp;эту папку ничего лишнего: покажется всё, что в&nbsp;ней лежит.</p>
-        <button class="help-close" id="help-close-btn">Понятно</button>
-      </div>
-    </div>
+    <!--
+      Как добавить/убрать афишу (для администратора, на экране планшета не показывается):
+      1. Откройте папку на Яндекс.Диске (ссылка — в CONFIG.YANDEX_PUBLIC_KEY ниже).
+      2. Чтобы добавить афишу — загрузите фото/PDF в эту папку с телефона или компьютера.
+      3. Чтобы убрать — удалите файл из папки.
+      4. Планшет подтянет изменения при следующем открытии раздела «Преподаватели».
+      Порядок афиш: чтобы у мероприятия была своя дата — начните имя файла с даты,
+      например "20.08.2026_Название.jpg". Ближайшие даты — первыми, файлы без даты
+      (регулярные классы) — после них, прошедшие даты — в конце.
+    -->
 
     <div class="lightbox" id="lightbox">
       <button class="lightbox-close" id="lightbox-close">✕</button>
@@ -489,7 +501,7 @@
   <!-- ================= ЦЕНЫ ================= -->
   <section class="view" data-view="prices">
     <div class="sub-inner" style="gap:0;">
-      <div class="topbar" style="margin-bottom:-8px;">
+      <div class="topbar">
         <button class="back-btn" data-open="home"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Назад</button>
       </div>
 
@@ -898,6 +910,57 @@
     });
   });
 
+  // ---- directions popup (полное описание направления) ----
+  const DIR_INFO = {
+    hatha: {
+      title: 'Хатха-йога',
+      text: 'Хатха — основа большинства современных практик в йоге. Занятия включают фундаментальные асаны (позы) для работы всего тела. Позволяют бережно поработать над выносливостью, научиться лучше контролировать своё тело, развивают гибкость и успокаивают ум. Классы сочетают в себе выполнение статичных асан, динамичные движения и дыхательные упражнения (пранаямы).'
+    },
+    vinyasa: {
+      title: 'Виньяса-флоу',
+      text: '«Виньяса» — это движение, выполненное синхронно с дыханием. На классе асаны выполняются последовательно, переходя из одной в другую. В этом направлении гармонично объединены мягкость потока, силовой аспект и глубокое дыхание.'
+    },
+    ashtanga: {
+      title: 'Аштанга-йога',
+      text: 'Интенсивно и динамично практикуем строгую последовательность асан, переходящих одна в другую через динамичные связки (виньясы). Благодаря чёткой последовательности возможно наблюдать за прогрессом своего физического и ментального состояния от занятия к занятию.'
+    },
+    jivamukti: {
+      title: 'Дживамукти-йога',
+      text: 'Направление зародилось в Нью-Йорке в 90-х годах как адаптация классической йоги для жителей мегаполиса, включает в себя философию, физическую и дыхательную практики и мантры. Класс проходит под музыку, сочетает в себе асаны с плавными движениями и синхронизированным с ними дыханием. Практика динамична и подойдёт тем, кто любит активную работу с телом.'
+    },
+    sound: {
+      title: 'Звукотерапия',
+      text: 'Медитативная практика глубокой релаксации под живое и умиротворяющее звучание различных нетрадиционных инструментов: поющих тибетских чаш, варгана, бубна или гонга. Такой класс — незабываемое путешествие внутрь себя, позволяющее найти новые источники сил, энергии или умиротворения.'
+    },
+    yin: {
+      title: 'Инь-йога',
+      text: 'Глубокое расслабление и наблюдение за своими ощущениями — без осуждения и оценки. Это статичная практика, где каждая асана выдерживается от 2 до 20 минут. За счёт длительного пребывания в позе в работу включаются очень глубокие слои тканей и запускается процесс исцеления организма.'
+    },
+  };
+
+  const dirModalOverlay = document.getElementById('dir-modal-overlay');
+  const dirModalTitle = document.getElementById('dir-modal-title');
+  const dirModalText = document.getElementById('dir-modal-text');
+
+  function openDirModal(key){
+    const info = DIR_INFO[key];
+    if(!info) return;
+    dirModalTitle.textContent = info.title;
+    dirModalText.textContent = info.text;
+    dirModalOverlay.classList.add('show');
+  }
+  function closeDirModal(){ dirModalOverlay.classList.remove('show'); }
+
+  document.querySelectorAll('.dir-card').forEach(card=>{
+    card.addEventListener('click', ()=> openDirModal(card.dataset.dir));
+  });
+  document.getElementById('dir-modal-close').addEventListener('click', closeDirModal);
+  dirModalOverlay.addEventListener('click', (e)=>{ if(e.target === dirModalOverlay) closeDirModal(); });
+  document.getElementById('dir-modal-schedule-btn').addEventListener('click', ()=>{
+    closeDirModal();
+    openView('schedule');
+  });
+
   // ---- gallery (Yandex Disk public folder → own vertical-poster grid) ----
   let posterItems = [];
 
@@ -956,8 +1019,7 @@
     wrap.innerHTML = '';
 
     if(!CONFIG.YANDEX_PUBLIC_KEY){
-      wrap.appendChild(galleryMessage(ICON_IMG, 'Галерея ещё не&nbsp;подключена',
-        'Нажмите «?» рядом с&nbsp;заголовком — там инструкция, как&nbsp;подключить папку Яндекс.Диска и&nbsp;дальше самостоятельно добавлять афиши без&nbsp;программиста.'));
+      wrap.appendChild(galleryMessage(ICON_IMG, 'Галерея ещё не&nbsp;подключена', ''));
       return;
     }
 
@@ -983,7 +1045,7 @@
 
       if(!posterItems.length){
         wrap.appendChild(galleryMessage(ICON_IMG, 'В папке пока нет&nbsp;афиш',
-          'Загрузите фото в&nbsp;папку на&nbsp;Яндекс.Диске — они появятся здесь.'));
+          'Загрузите фото в&nbsp;папку на&nbsp;Яндекс.Диске — они появятся здесь'));
         return;
       }
 
@@ -1001,7 +1063,7 @@
     } catch(err){
       wrap.innerHTML = '';
       wrap.appendChild(galleryMessage(ICON_WARN, 'Не&nbsp;удалось загрузить афиши',
-        'Проверьте подключение планшета к&nbsp;интернету и&nbsp;ссылку на&nbsp;папку Яндекс.Диска в&nbsp;настройках.'));
+        'Проверьте подключение планшета к&nbsp;интернету и&nbsp;ссылку на&nbsp;папку Яндекс.Диска в&nbsp;настройках'));
     }
   }
 
@@ -1028,11 +1090,6 @@
     updateLightbox();
   });
   lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('show'); });
-
-  // ---- help overlay ----
-  const helpOverlay = document.getElementById('help-overlay');
-  document.getElementById('help-open-btn').addEventListener('click', ()=> helpOverlay.classList.add('show'));
-  document.getElementById('help-close-btn').addEventListener('click', ()=> helpOverlay.classList.remove('show'));
 </script>
 </body>
 </html>
