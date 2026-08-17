@@ -120,13 +120,17 @@
     color:#fff; font-size:26px; font-weight:800; line-height:1.15;
     text-shadow: 0 2px 10px rgba(0,0,0,.18);
   }
-  .photo-card-overlay .pill{
-    display:inline-flex; align-items:center; justify-content:center; max-width:100%; box-sizing:border-box;
-    border:1.5px solid rgba(255,255,255,.9); border-radius:999px;
-    padding: 8px 18px;
-    font-family:'Montserrat',sans-serif; font-size:.85rem; font-weight:500; color:#fff;
-    line-height:1.25; white-space:normal; text-align:left;
+  .photo-card-overlay .sub{
+    max-width:100%; box-sizing:border-box; text-align:left;
+    font-family:'Montserrat',sans-serif; font-size:.9rem; font-weight:500; color:#fff; opacity:.9;
+    line-height:1.35; text-shadow: 0 1px 6px rgba(0,0,0,.25);
   }
+  .photo-card-arrow{
+    position:absolute; right:16px; bottom:16px; width:40px; height:40px; border-radius:50%;
+    background:#fff; color:var(--ink); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
+  }
+  .photo-card-arrow svg{ width:18px; height:18px; }
 
   /* ---------- SUBVIEW COMMON ---------- */
   .sub-inner{ padding: clamp(24px,2.6vw,34px); display:flex; flex-direction:column; gap:20px; flex:1; box-sizing:border-box; }
@@ -143,33 +147,71 @@
   .sub-title{ font-size:clamp(1.3rem,2.2vw,1.8rem); }
 
   /* ---------- ABOUT ---------- */
-  .about-photos{
-    display:grid; grid-template-columns:1.3fr 1fr; grid-template-rows:1fr 1fr;
-    gap:14px; border-radius:var(--r); overflow:hidden;
-    max-height: 42vh;
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: minmax(0,42vh) auto;
+    gap:14px;
+    flex:1; min-height:0;
   }
-  .about-photos img{ width:100%; height:100%; object-fit:cover; display:block; }
-  .about-photos .p1{ grid-row:1/3; border-radius:var(--r); }
-  .about-photos .p2, .about-photos .p3{ border-radius:var(--r); }
-  .about-photos .p1, .about-photos .p2, .about-photos .p3{ overflow:hidden; }
+  .about-photo-main{
+    grid-column:1; grid-row:1;
+    width:100%; height:100%; object-fit:cover; display:block;
+    border-radius:var(--r);
+  }
+  .about-photo-side1{
+    grid-column:2; grid-row:1;
+    width:100%; height:100%; object-fit:cover; display:block;
+    border-radius:var(--r);
+  }
+  .about-photo-side2{
+    grid-column:3; grid-row:1;
+    width:100%; height:100%; object-fit:cover; display:block;
+    border-radius:var(--r);
+  }
 
   .about-text{
-    display:flex; flex-direction:column; gap:16px; max-width:900px;
+    grid-column:1; grid-row:2;
+    display:flex; flex-direction:column; gap:16px;
   }
   .about-text p{
-    margin:0; font-size:clamp(.95rem,1.3vw,1.12rem); line-height:1.6; color:var(--ink);
+    margin:0; font-size:clamp(.9rem,1.2vw,1.05rem); line-height:1.6; color:var(--ink);
   }
   .about-text p.lead{
     font-family:'Lora',Georgia,serif; font-style:italic; font-weight:400;
-    font-size:clamp(1.1rem,1.6vw,1.35rem); color:var(--olive); line-height:1.5;
+    font-size:clamp(1.05rem,1.5vw,1.25rem); color:var(--olive); line-height:1.5;
   }
-  .about-facts{
-    background:#fff; border:1px solid var(--line); border-radius:var(--r); padding:18px 22px;
-    font-size:clamp(.85rem,1.1vw,1rem); line-height:1.7; color:var(--ink);
+  .about-halls{
+    background:#fff; border:1px solid var(--line); border-radius:var(--r); padding:20px 22px;
+  }
+  .about-halls h3{ font-size:1.35rem; margin-bottom:2px; }
+  .about-halls-sub{ margin:0 0 14px; font-size:.9rem; color:var(--muted); }
+  .about-halls-label{
+    margin:0 0 10px; font-size:.78rem; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--ink);
+  }
+  .about-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+  .about-pill{
+    border:1px solid var(--line); border-radius:999px; padding:7px 14px;
+    font-size:.82rem; font-weight:500; color:var(--ink); background:var(--cream);
   }
   .about-contact{
     color:var(--muted); font-size:.85rem; font-weight:600;
   }
+
+  .about-qr{
+    grid-column:2/4; grid-row:2;
+    background:#fff; border:1px solid var(--line); border-radius:var(--r);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    padding:20px;
+  }
+  .about-qr-code{
+    width:clamp(110px,12vw,150px); height:clamp(110px,12vw,150px);
+    background:var(--sand); border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .about-qr-code img{ width:100%; height:100%; object-fit:contain; display:block; border-radius:12px; }
+  .about-qr-label{ margin:0; font-size:.85rem; font-weight:600; color:var(--olive); text-align:center; }
 
   /* ---------- DIRECTIONS ---------- */
   .dir-grid{
@@ -278,7 +320,8 @@
   }
   .lightbox-nav{
     position:absolute; top:50%; transform:translateY(-50%);
-    width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.16); color:#fff;
+    width:48px; height:48px; border-radius:50%; background:#fff; color:var(--ink);
+    box-shadow:0 4px 16px rgba(0,0,0,.3); z-index:2;
     border:none; font-size:1.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .lightbox-nav.prev{ left:16px; }
@@ -319,29 +362,33 @@
           <img src="assets/card-practices.jpg" alt="Практики — хатха, дживамукти, аштанга и другие">
           <div class="photo-card-overlay">
             <h3>Практики</h3>
-            <span class="pill">Хатха, дживамукти, аштанга и&nbsp;др</span>
+            <span class="sub">Хатха, дживамукти, аштанга и&nbsp;др</span>
           </div>
+          <span class="photo-card-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <button class="photo-card" data-open="teachers">
           <img src="assets/card-teachers.jpg" alt="Преподаватели — афиши классов и мероприятий">
           <div class="photo-card-overlay">
             <h3>Преподаватели</h3>
-            <span class="pill">Афиши классов и&nbsp;мероприятий</span>
+            <span class="sub">Афиши классов и&nbsp;мероприятий</span>
           </div>
+          <span class="photo-card-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <button class="photo-card" data-open="schedule">
           <img src="assets/card-schedule.jpg" alt="Расписание — на сегодня и на неделю">
           <div class="photo-card-overlay">
             <h3>Расписание</h3>
-            <span class="pill">На&nbsp;сегодня и&nbsp;на&nbsp;неделю</span>
+            <span class="sub">На&nbsp;сегодня и&nbsp;на&nbsp;неделю</span>
           </div>
+          <span class="photo-card-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <button class="photo-card" data-open="prices">
           <img src="assets/card-prices.jpg" alt="Стоимость — разовые и пробные занятия, абонементы">
           <div class="photo-card-overlay">
             <h3>Стоимость</h3>
-            <span class="pill">Разовые занятия, абонементы</span>
+            <span class="sub">Разовые занятия, абонементы</span>
           </div>
+          <span class="photo-card-arrow"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
       </div>
     </div>
@@ -358,19 +405,41 @@
         </div>
       </div>
 
-      <div class="about-photos">
-        <img class="p1" src="assets/about-1.jpg" alt="Медитация в зале Yoga Space">
-        <img class="p2" src="assets/about-2.jpg" alt="Именные шкафчики в раздевалке">
-        <img class="p3" src="assets/about-3.jpg" alt="Уютный уголок студии">
-      </div>
+      <div class="about-grid">
+        <img class="about-photo-main" src="assets/about-main.jpg" alt="Медитация в зале Yoga Space">
+        <img class="about-photo-side1" src="assets/about-side1.jpg" alt="Коврик Yoga Space">
+        <img class="about-photo-side2" src="assets/about-side2.jpg" alt="Уютный уголок студии">
 
-      <div class="about-text">
-        <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни</p>
-        <p>Йога для&nbsp;нас — это не&nbsp;только физические и&nbsp;дыхательные упражнения на&nbsp;коврике, но&nbsp;и&nbsp;то, каким человеком ты&nbsp;становишься за&nbsp;его пределами. Мы&nbsp;верим в&nbsp;работу над&nbsp;собой и&nbsp;в&nbsp;активное участие в&nbsp;жизни общества.</p>
-        <div class="about-facts">
-          Студия — в&nbsp;историческом здании, в&nbsp;100&nbsp;м от&nbsp;метро Чернышевская. 3&nbsp;зала — на&nbsp;2, 17&nbsp;и&nbsp;25&nbsp;человек. Есть всё необходимое: коврики, блоки, пледы, душ, полотенца, фен и&nbsp;травяной чай.
+        <div class="about-text">
+          <p class="lead">Yoga Space — сообщество небезразличных людей, объединённых холистическим подходом к&nbsp;жизни</p>
+          <p>Йога для&nbsp;нас — это не&nbsp;только физические и&nbsp;дыхательные упражнения на&nbsp;коврике, но&nbsp;и&nbsp;то, каким человеком ты&nbsp;становишься за&nbsp;его пределами. Мы&nbsp;верим в&nbsp;работу над&nbsp;собой и&nbsp;в&nbsp;активное участие в&nbsp;жизни общества.</p>
+
+          <div class="about-halls">
+            <h3>3&nbsp;зала</h3>
+            <p class="about-halls-sub">На&nbsp;2, 17&nbsp;и&nbsp;25&nbsp;человек</p>
+            <p class="about-halls-label">Есть всё необходимое:</p>
+            <div class="about-pills">
+              <span class="about-pill">Коврики</span>
+              <span class="about-pill">Блоки</span>
+              <span class="about-pill">Пледы</span>
+              <span class="about-pill">Антисептик</span>
+              <span class="about-pill">Душ</span>
+              <span class="about-pill">Полотенца</span>
+              <span class="about-pill">Средства для&nbsp;тела и&nbsp;волос</span>
+              <span class="about-pill">Фен</span>
+              <span class="about-pill">Косметические принадлежности</span>
+              <span class="about-pill">Зарядки</span>
+              <span class="about-pill">Травяной чай</span>
+            </div>
+          </div>
+
+          <div class="about-contact">пр. Чернышевского, 18, этаж&nbsp;2 · +7&nbsp;(932)&nbsp;266-18-18 · @yogaspacespb</div>
         </div>
-        <div class="about-contact">пр. Чернышевского, 18, этаж&nbsp;2 · +7&nbsp;(932)&nbsp;266-18-18 · @yogaspacespb</div>
+
+        <a class="about-qr" href="https://t.me/yogaspace_moscow" target="_blank" rel="noopener">
+          <div class="about-qr-code"><img src="assets/telegram-qr.png" alt="QR-код Telegram-канала Yoga Space"></div>
+          <p class="about-qr-label">Наш Telegram-канал</p>
+        </a>
       </div>
     </div>
   </section>
